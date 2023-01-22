@@ -26,17 +26,68 @@ package com.frank_mitchell.jsonpp;
  * Enumeration of all possible JsonPullParser events.
  */
 public enum JsonEvent {
+    /**
+     * Invalid JSON syntax.
+     */
     SYNTAX_ERROR,
+
+    /**
+     * Before first JSON element
+     */
     START_STREAM,
+
+    /**
+     * Start of JSON array (<code>[</code>)
+     */
     START_ARRAY,
+
+    /**
+     * End of JSON array (<code>]</code>)
+     */
     END_ARRAY,
+
+    /**
+     * Start of JSON object (<code>{</code>)
+     */
     START_OBJECT,
+
+    /**
+     * End of JSON object (<code>}</code>)
+     */
     END_OBJECT,
+
+    /**
+     * Key of JSON object member (<i>string</i> <code>:</code>)
+     */
     KEY_NAME,
+
+    /**
+     * JSON null (<code>null</code>)
+     */
     VALUE_NULL,
+
+    /**
+     * JSON boolean true (<code>true</code>)
+     */
     VALUE_TRUE,
+
+    /**
+     * JSON boolean false (<code>false</code>)
+     */
     VALUE_FALSE,
+
+    /**
+     * JSON number
+     */
     VALUE_NUMBER,
+
+    /**
+     * JSON string (<code>"</code>...<code>"</code>)
+     */
     VALUE_STRING,
+
+    /**
+     * After last JSON element
+     */
     END_STREAM
 };
