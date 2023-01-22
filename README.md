@@ -18,12 +18,6 @@ but JSONPP has a different design and different goals from JSONP.
 * If I've done my job, JSONPP creates as few temporary objects as possible.
   This is a boon for environments with strict memory constraints.
 
-* JSONPP provides the key associated with the current value.  In the case of a
-  nested Object or Array,`getCurrentKey()` returns the key in the enclosing Object
-  (if any) at the start and end of the value. JSONP provides the key only at the
-  KEY_NAME event; developers must track where in the enclosing Object a value
-  goes.
-
 * Unlike JSONP's `JsonParser`, JSONPP separates the method that advances to the 
   next event from the method that provides the event type. One can pass a 
   `JsonPullParser` instance to other methods by itself. As long as no client 
@@ -38,6 +32,7 @@ but JSONPP has a different design and different goals from JSONP.
 
 * JSONPP runs under Java 8. JSONP is targeted for Java 9+, although I can compile
   the API under Java 8 (sans module definitions).
+
 
 ## BUILDING JSONPP ###
 

@@ -22,14 +22,15 @@
 
 package com.frank_mitchell.jsonpp.spi;
 
-import java.io.*;
-import java.util.*;
-
 import com.frank_mitchell.jsonpp.JsonPullParser;
 import com.frank_mitchell.jsonpp.JsonPullParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
- * The default JsonPullParserFactory.
+ * The default {@link JsonPullParserFactory}.
  *
  * Only this class is public because extending the others is at best
  * useless and at worst a source of bugs.
@@ -38,6 +39,8 @@ import com.frank_mitchell.jsonpp.JsonPullParserFactory;
  */
 public final class DefaultJsonPullParserFactory implements JsonPullParserFactory {
 
+    private static final String UTF8 = "UTF-8";
+
     @Override
     public JsonPullParser createParser(Reader reader) throws IOException {
         return new DefaultJsonPullParser(new ReaderSource(reader));
@@ -45,7 +48,7 @@ public final class DefaultJsonPullParserFactory implements JsonPullParserFactory
 
     @Override
     public JsonPullParser createParser(InputStream input) throws IOException {
-        return createParser(new InputStreamReader(input));
+        return createParser(new InputStreamReader(input, UTF8));
     }
 
     @Override
