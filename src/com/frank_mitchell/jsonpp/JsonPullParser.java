@@ -30,10 +30,10 @@ import java.math.BigDecimal;
  * 
  * Each call to {@link #next()} moves to the next event in the
  * stream, and the various "get" methods identify the type of
- * event, the value of a String or Number, the name of a key
+ * event, the value of a String or Number, and/or the name of a key
  * String.
  * 
- * @author fmitchell
+ * @author Frank Mitchell
  *
  */
 public interface JsonPullParser {
@@ -43,25 +43,25 @@ public interface JsonPullParser {
      * 
      * @return most recently parsed event.
      */
-	public JsonEvent getEvent();
+    public JsonEvent getEvent();
 
-	/**
-	 * Gets the string value associated with the current event.
-	 * 
-	 * On {@link JsonEvent#VALUE_STRING} or {@link JsonEvent#KEY_NAME},
-	 * the result is the JSON String with all escape sequences 
-	 * converted to their character values.
-	 * 
-	 * On a {@link JsonEvent#VALUE_NUMBER}, the result is the number
-	 * as originally read.
-	 * 
-	 * Otherwise the method throws an exception
-	 * 
-	 * @return  the value of a String or Number or <code>null<code> 
-	 * 
-	 * @throws IllegalStateException if the current event is not a number.
-	 */
-	public String getString();
+    /**
+     * Gets the string value associated with the current event.
+     * 
+     * On {@link JsonEvent#VALUE_STRING} or {@link JsonEvent#KEY_NAME},
+     * the result is the JSON String with all escape sequences 
+     * converted to their character values.
+     * 
+     * On a {@link JsonEvent#VALUE_NUMBER}, the result is the number
+     * as originally read.
+     * 
+     * Otherwise the method throws an exception
+     * 
+     * @return  the value of a String or Number or <code>null<code> 
+     * 
+     * @throws IllegalStateException if the current event is not a number.
+     */
+    public String getString();
 
 
     /**
@@ -75,10 +75,10 @@ public interface JsonPullParser {
      * 
      * @throws IllegalStateException if the current event is not a number.
      */
-	public BigDecimal getBigDecimal();
-	
+    public BigDecimal getBigDecimal();
+    
 
-	/**
+    /**
      * Gets the <code>double</code> value associated with the current event.
      * 
      * If {@link #getEvent()} is {@link JsonEvent#VALUE_NUMBER},
@@ -88,10 +88,10 @@ public interface JsonPullParser {
      * @return the value of the current JSON Number
      * 
      * @throws IllegalStateException if the current event is not a number.
-	 */
-	public double getDouble() throws IllegalStateException;
+     */
+    public double getDouble() throws IllegalStateException;
 
-	
+    
     /**
      * Gets the <code>int</code> value associated with the current event.
      * 
@@ -112,7 +112,8 @@ public interface JsonPullParser {
      * this method returns an unspecified subclass of Number.
      * Otherwise this method throws an exception. 
      * 
-     * @return
+     * @return the value of the current JSON Number
+     * 
      * @throws IllegalStateException
      */
     default public long getLong() throws IllegalStateException {
@@ -123,24 +124,25 @@ public interface JsonPullParser {
         return n.longValue();
     }
 
-	/**
-	 * Advances to the next significant JSON element in the
-	 * underlying stream.
-	 * 
-	 * @throws IOException if 
-	 */
-	public void next() throws IOException;
-	
-	/**
-	 * Equivalent to calling {@link #next()} followed by
-	 * {@link #getEvent()}.
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	default public JsonEvent nextEvent() throws IOException {
-	    next();
-	    return getEvent();
-	}
+    /**
+     * Advances to the next significant JSON element in the
+     * underlying stream.
+     * 
+     * @throws IOException if the character source could not be read.
+     */
+    public void next() throws IOException;
+    
+    /**
+     * Equivalent to calling {@link #next()} followed by
+     * {@link #getEvent()}.
+     * 
+     * @return most recently parsed event.
+     *
+     * @throws IOException if the character source could not be read
+     */
+    default public JsonEvent nextEvent() throws IOException {
+        next();
+        return getEvent();
+    }
 
 }

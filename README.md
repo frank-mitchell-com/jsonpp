@@ -36,16 +36,26 @@ but JSONPP has a different design and different goals from JSONP.
   This avoids the overhead of exceptions, again for memory-limited and real-time
   applications.  The caller can always throw their own if they want.
 
-* JSONPP runs under Java 8. JSONP is targeted for Java 9, although I can compile
+* JSONPP runs under Java 8. JSONP is targeted for Java 9+, although I can compile
   the API under Java 8 (sans module definitions).
+
+## BUILDING JSONPP ###
+
+The project includes project files for both Eclipse and NetBeans. Fire up your
+favorite IDE (if it's one of those two) and go to town. *Or* just run `ant`.
+
+It's a bunch of `.java` files. It's not that hard.
 
 
 ## INSTALLING JSONPP ##
 
-TBD
+Simply put jsonpp.jar (or jsonpp-*version*.jar) in your CLASSPATH somewhere.
 
 
 ## USING JSONPP ##
+
+The `com.frank_mitchell.jsonpp` package includes the public API,
+while `com.frank_mitchell.jsonpp.spi` contains the
 
 JSONPP is a "pull parser" because instead of providing input and a callback
 interface like SAX parsers, the caller pulls new tokens or events from the input at

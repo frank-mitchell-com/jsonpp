@@ -27,14 +27,19 @@ import java.util.Map;
 
 import com.frank_mitchell.jsonpp.spi.DefaultJsonPullParserFactory;
 
+/** 
+ * A utility class to create a default JsonPullParserFactory.
+ * 
+ * Users will no doubt find a better method.
+ */
 public final class JsonPull {
 
+    /**
+     * Create a factory.
+     *
+     * @return default factory
+     */
     public static JsonPullParserFactory createParserFactory() {
-        return new DefaultJsonPullParserFactory(null);
+        return new DefaultJsonPullParserFactory();
     }
-    
-    public static JsonPullParserFactory createParserFactory(Map<String, Object> config) {
-        return new DefaultJsonPullParserFactory(config);
-    }
-
 }

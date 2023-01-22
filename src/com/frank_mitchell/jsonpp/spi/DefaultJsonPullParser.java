@@ -29,6 +29,9 @@ import java.util.*;
 import com.frank_mitchell.jsonpp.JsonEvent;
 import com.frank_mitchell.jsonpp.JsonPullParser;
 
+/**
+ * A default impementation of the JsonPullParser.
+ */
 final class DefaultJsonPullParser implements JsonPullParser {
 
     private static final int   EXPECT_KEY            = 1;

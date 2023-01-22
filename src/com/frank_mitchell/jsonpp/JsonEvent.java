@@ -22,6 +22,9 @@
 
 package com.frank_mitchell.jsonpp;
 
+/**
+ * Enumeration of all possible JsonPullParser events.
+ */
 public enum JsonEvent {
     SYNTAX_ERROR,
     START_STREAM,

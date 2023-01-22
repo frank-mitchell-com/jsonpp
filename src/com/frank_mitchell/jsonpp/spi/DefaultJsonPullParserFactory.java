@@ -22,10 +22,6 @@
 
 package com.frank_mitchell.jsonpp.spi;
 
-
-/**
- * 
- */
 import java.io.*;
 import java.util.*;
 
@@ -33,23 +29,14 @@ import com.frank_mitchell.jsonpp.JsonPullParser;
 import com.frank_mitchell.jsonpp.JsonPullParserFactory;
 
 /**
- * @author frankmitchell
+ * The default JsonPullParserFactory.
  *
+ * Only this class is public because extending the others is at best
+ * useless and at worst a source of bugs.
+ *
+ * @author Frank Mitchell
  */
 public final class DefaultJsonPullParserFactory implements JsonPullParserFactory {
-
-    private final Map<String, Object> _config;
-
-    public DefaultJsonPullParserFactory() {
-        this(null);
-    }
-
-    public DefaultJsonPullParserFactory(Map<String, ?> conf) {
-        _config = new HashMap<String, Object>();
-        if (conf != null) {
-            _config.putAll(conf);
-        }
-    }
 
     @Override
     public JsonPullParser createParser(Reader reader) throws IOException {
