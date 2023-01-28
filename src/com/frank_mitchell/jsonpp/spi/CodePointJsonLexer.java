@@ -53,7 +53,8 @@ final class CodePointJsonLexer implements JsonLexer {
         int c = _source.getCodePoint();
 
         while (c >= 0 && isJsonWhitespace(c)) {
-            c = _source.nextCodePoint();
+            _source.next();
+            c = _source.getCodePoint();
         }
 
         if (c < 0) {
@@ -197,7 +198,8 @@ final class CodePointJsonLexer implements JsonLexer {
 
         if (c == '-') {
             _tokenBuf.append((char) c);
-            c = _source.nextCodePoint();
+            _source.next();
+            c = _source.getCodePoint();
             if (c < 0) {
                 // Unexpected end of input
                 _tokenBuf.append("<EOF>");
@@ -213,7 +215,8 @@ final class CodePointJsonLexer implements JsonLexer {
         if (c == '0') {
             // according to spec, only zero or a decimal can start with 0
             _tokenBuf.append('0');
-            c = _source.nextCodePoint();
+            _source.next();
+            c = _source.getCodePoint();
         } else {
             while (isJsonDigit(c)) {
                 _tokenBuf.append((char) c);
@@ -225,11 +228,13 @@ final class CodePointJsonLexer implements JsonLexer {
         // decimal portion
         if (c == '.') {
             _tokenBuf.append('.');
-            c = _source.nextCodePoint();
+            _source.next();
+            c = _source.getCodePoint();
 
             while (isJsonDigit(c)) {
                 _tokenBuf.append((char) c);
-                c = _source.nextCodePoint();
+                _source.next();
+                c = _source.getCodePoint();
             }
         }
 
@@ -241,15 +246,18 @@ final class CodePointJsonLexer implements JsonLexer {
         // exponent
         if (c == 'e' || c == 'E') {
             _tokenBuf.append('e');
-            c = _source.nextCodePoint();
+            _source.next();
+            c = _source.getCodePoint();
 
             if (c == '-' || c == '+') {
                 _tokenBuf.append((char) c);
-                c = _source.nextCodePoint();
+                _source.next();
+                c = _source.getCodePoint();
             }
             while (isJsonDigit(c)) {
                 _tokenBuf.append((char) c);
-                c = _source.nextCodePoint();
+                _source.next();
+                c = _source.getCodePoint();
             }
         }
 
@@ -263,7 +271,8 @@ final class CodePointJsonLexer implements JsonLexer {
         _tokenBuf.append((char) c);
 
         do {
-            c = _source.nextCodePoint();
+            _source.next();
+            c = _source.getCodePoint();
 
             if (c < 0) {
                 // end of input without closing quote
@@ -299,15 +308,17 @@ final class CodePointJsonLexer implements JsonLexer {
         int c = _source.getCodePoint();
 
         _tokenBuf.append((char) c);
+        _source.next();
         
-        c = _source.nextCodePoint();
+        c = _source.getCodePoint();
         _tokenBuf.append((char) c);
 
         if (isJsonEscapeChar(c)) {
             if (c == 'u') {
                 // also ensure next four chars are hex digits
                 for (int i = 0; i < 4; i++) {
-                    c = _source.nextCodePoint();
+                    _source.next();
+                    c = _source.getCodePoint();
                     _tokenBuf.append((char) c);
                     if (!isJsonHexDigit(c)) {
                         return false;

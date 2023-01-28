@@ -11,7 +11,7 @@
 
 ## API
 
-* restore `getCurrentKey`?
+* Add CodePointSource and AbstractJsonPullParserFactory to the public API?
 
 * build `JsonEmitter` that writes events as JSON to Writer, OutputStream, 
   or CharBuffer.
@@ -44,6 +44,9 @@
 
 ## Tests
 
+* Make tests more readable and writable. E.g. feed bits of JSON to a MockReader
+  just before testing they were parsed correctly.
+
 * Test error conditions.
 
 * Improve error reporting.
@@ -73,10 +76,6 @@
 
 
 ## Documentation
-
-* revisit README.md.
-
-* add Javadoc (and license headers!)
 
 * add example code, including a general Maps and Lists builder.
 

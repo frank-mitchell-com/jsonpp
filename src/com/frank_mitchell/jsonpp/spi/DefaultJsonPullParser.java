@@ -19,26 +19,25 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-
 package com.frank_mitchell.jsonpp.spi;
-
-import java.io.*;
-import java.math.BigDecimal;
-import java.util.*;
 
 import com.frank_mitchell.jsonpp.JsonEvent;
 import com.frank_mitchell.jsonpp.JsonPullParser;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
- * A default impementation of the JsonPullParser.
+ * A default implementation of the JsonPullParser.
  */
 final class DefaultJsonPullParser implements JsonPullParser {
 
-    private static final int   EXPECT_KEY            = 1;
-    private static final int   EXPECT_COLON          = 2;
-    private static final int   EXPECT_VALUE          = 3;
-    private static final int   EXPECT_COMMA_OR_CLOSE = 4;
-    private static final int   EXPECT_EOF            = 5;
+    private static final int EXPECT_KEY = 1;
+    private static final int EXPECT_COLON = 2;
+    private static final int EXPECT_VALUE = 3;
+    private static final int EXPECT_COMMA_OR_CLOSE = 4;
+    private static final int EXPECT_EOF = 5;
 
     private int _expectState = EXPECT_VALUE;
 
@@ -48,12 +47,28 @@ final class DefaultJsonPullParser implements JsonPullParser {
 
     private final JsonLexer _lexer;
 
-    private final BitSet _objectsByDepth = new BitSet();
-    private int _depth = 0;
+    private final Deque<ValueFrame> _objectStack = new ArrayDeque<>();
 
-    
-    DefaultJsonPullParser(Reader r) throws IOException {
-        this(new ReaderSource(r));
+    private static class ValueFrame {
+
+        private final boolean _inObject;
+        private String _key;
+
+        ValueFrame(boolean value) {
+            _inObject = value;
+        }
+
+        boolean isInObject() {
+            return _inObject;
+        }
+
+        private String getKey() {
+            return _key;
+        }
+
+        private void setKey(String value) {
+            _key = value;
+        }
     }
 
     DefaultJsonPullParser(CodePointSource s) throws IOException {
@@ -87,7 +102,7 @@ final class DefaultJsonPullParser implements JsonPullParser {
         }
         return _numberValue;
     }
-    
+
     @Override
     public double getDouble() throws IllegalStateException {
         return getBigDecimal().doubleValue();
@@ -97,7 +112,6 @@ final class DefaultJsonPullParser implements JsonPullParser {
     public int getInt() throws IllegalStateException {
         return getBigDecimal().intValue();
     }
-
 
     @Override
     public void next() throws IOException {
@@ -115,7 +129,7 @@ final class DefaultJsonPullParser implements JsonPullParser {
                 _currentEvent = JsonEvent.SYNTAX_ERROR;
                 break;
             }
-            
+
             switch (token) {
                 case JsonLexer.TOKEN_OBJ_OPEN:
                     _currentEvent = JsonEvent.START_OBJECT;
@@ -149,6 +163,7 @@ final class DefaultJsonPullParser implements JsonPullParser {
                     _stringValue = unquote(_lexer.getToken());
                     if (isExpectingKey()) {
                         _currentEvent = JsonEvent.KEY_NAME;
+                        setKey(_stringValue);
                         setExpectColon();
                     } else {
                         _currentEvent = JsonEvent.VALUE_STRING;
@@ -196,41 +211,66 @@ final class DefaultJsonPullParser implements JsonPullParser {
         }
     }
 
+    @Override
+    public boolean isInObject() {
+        final ValueFrame frame = _objectStack.peek();
+        if (frame != null) {
+            return frame.isInObject();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isInArray() {
+        final ValueFrame frame = _objectStack.peek();
+        if (frame != null) {
+            return !frame.isInObject();
+        }
+        return false;
+    }
+
+    @Override
+    public String getCurrentKey() {
+        final ValueFrame frame = _objectStack.peek();
+        if (frame != null && frame.isInObject()) {
+            return frame.getKey();
+        }
+        return null;
+    }
+
+    void setKey(String key) {
+        final ValueFrame frame = _objectStack.peek();
+        if (frame != null && frame.isInObject()) {
+            frame.setKey(key);
+        }
+        // else this is an error, right?
+    }
+
     boolean isRootLevel() {
         return getDepth() == 0;
     }
 
-    boolean isInObject() {
-        return _objectsByDepth.get(getDepth()-1);
-    }
-
-    boolean isInArray() {
-        return !isInObject();
-    }
-
     private int getDepth() {
-        return _depth;
+        return _objectStack.size();
     }
 
     void decreaseDepth() {
-        _depth--;
-        _objectsByDepth.clear(_depth);
+        _objectStack.pop();
     }
 
     void increaseDepth(boolean isobject) {
-        _objectsByDepth.set(_depth, isobject);
-        _depth++;
+        _objectStack.push(new ValueFrame(isobject));
     }
 
     private String unquote(CharSequence seq) {
         // trim off quotes
         StringBuilder sb = new StringBuilder(seq.length());
         sb.append(seq, 1, seq.length() - 1);
-        
+
         // replace escape sequences with real characters
         int pos = sb.indexOf("\\");
         String s;
-        
+
         while (pos >= 0) {
             char c = sb.charAt(pos + 1);
             switch (c) {
@@ -240,24 +280,24 @@ final class DefaultJsonPullParser implements JsonPullParser {
                     sb.deleteCharAt(pos);
                     break;
                 case 'b':
-                    sb.replace(pos, pos+2, "\b");
+                    sb.replace(pos, pos + 2, "\b");
                     break;
                 case 'f':
-                    sb.replace(pos, pos+2, "\f");
+                    sb.replace(pos, pos + 2, "\f");
                     break;
                 case 'n':
-                    sb.replace(pos, pos+2, "\n");
+                    sb.replace(pos, pos + 2, "\n");
                     break;
                 case 'r':
-                    sb.replace(pos, pos+2, "\r");
+                    sb.replace(pos, pos + 2, "\r");
                     break;
                 case 't':
-                    sb.replace(pos, pos+2, "\t");
+                    sb.replace(pos, pos + 2, "\t");
                     break;
                 case 'u':
                     s = sb.substring(pos + 2, pos + 6);
-                    c = (char)Integer.parseUnsignedInt(s, 16);
-                    sb.replace(pos, pos+6, String.valueOf(c));
+                    c = (char) Integer.parseUnsignedInt(s, 16);
+                    sb.replace(pos, pos + 6, String.valueOf(c));
                     break;
             }
             pos = sb.indexOf("\\", pos + 1);

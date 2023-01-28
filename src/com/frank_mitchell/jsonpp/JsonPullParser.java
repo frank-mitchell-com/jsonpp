@@ -33,6 +33,13 @@ import java.math.BigDecimal;
  * event, the value of a String or Number, and/or the name of a key
  * String.
  * 
+ * Implementations of this interface aren't guaranteed to be thread safe.
+ * In most cases one thread will parse an input stream and then discard
+ * this parser. In some cases one thread <strong>might</strong> hand
+ * a parser off to another thread, then continue parsing once that thread
+ * has finished. (In the latter case a co-routine or cooperative 
+ * single-threaded framework might be more efficient.)
+ * 
  * @author Frank Mitchell
  *
  */
@@ -46,9 +53,68 @@ public interface JsonPullParser {
     public JsonEvent getEvent();
 
     /**
+     * Indicates if the enclosing value is a JSON Array.
+     * 
+     * If this object is currently processing the contents of a JSON Array,
+     * this method will return <code>true</code>.
+     * 
+     * @return <code>true</code> if the enclosing value is a JSON Array.
+     * 
+     * @see #isInObject() 
+     */
+    public boolean isInArray();
+    
+    /**
+     * Indicates if the enclosing value is a JSON Object.
+     * 
+     * If this parser is currently processing the contents of a JSON Object,
+     * this method will return <code>true</code>.
+     * If neither this method nor {@link #isInArray()} are true,
+     * this parser is either at the start or end of the document,
+     * the document contains only an atomic value,
+     * or the parser encountered an error.
+     *
+     * @return <code>true</code> if the enclosing value is a JSON Object.
+     */
+    public boolean isInObject();
+
+    /**
+     * Gets the key associated with the current value.
+     * 
+     * On {@link JsonEvent#KEY_NAME},
+     * the result is the JSON Object key just parsed.
+     * 
+     * On 
+     * {@link JsonEvent#END_OBJECT},
+     * {@link JsonEvent#END_ARRAY},
+     * {@link JsonEvent#VALUE_STRING},
+     * {@link JsonEvent#VALUE_NUMBER},
+     * {@link JsonEvent#VALUE_TRUE},
+     * {@link JsonEvent#VALUE_FALSE},
+     * or {@link JsonEvent#VALUE_NULL}, 
+     * the result is the JSON Object key this value should be assigned
+     * to, if the enclosing construct is a JSON Object.
+     * 
+     * On {@link JsonEvent#START_STREAM},
+     * {@link JsonEvent#START_ARRAY},
+     * {@link JsonEvent#START_OBJECT},
+     * {@link JsonEvent#END_STREAM},
+     * or {@link JsonEvent#SYNTAX_ERROR}
+     * or if there is no immediately enclosing JSON object,
+     * this method returns <code>null</code>;
+     * 
+     * @return  the value of a String or Number or <code>null<code> 
+     */
+    public String getCurrentKey();
+
+    /**
      * Gets the string value associated with the current event.
      * 
-     * On {@link JsonEvent#VALUE_STRING} or {@link JsonEvent#KEY_NAME},
+     * On {@link JsonEvent#KEY_NAME},
+     * the result is the JSON Object key with all escape sequences 
+     * converted to their character values.
+     * 
+     * On {@link JsonEvent#VALUE_STRING},
      * the result is the JSON String with all escape sequences 
      * converted to their character values.
      * 
@@ -59,10 +125,9 @@ public interface JsonPullParser {
      * 
      * @return  the value of a String or Number or <code>null<code> 
      * 
-     * @throws IllegalStateException if the current event is not a number.
+     * @throws IllegalStateException if the current event has no string value.
      */
     public String getString();
-
 
     /**
      * Gets the {@link BigDecimal} value associated with the current event.
@@ -144,5 +209,4 @@ public interface JsonPullParser {
         next();
         return getEvent();
     }
-
 }

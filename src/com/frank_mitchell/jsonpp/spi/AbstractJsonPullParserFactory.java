@@ -19,29 +19,47 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-
 package com.frank_mitchell.jsonpp.spi;
 
+import com.frank_mitchell.jsonpp.JsonPullParser;
+import com.frank_mitchell.jsonpp.JsonPullParserFactory;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collections;
+import java.util.Map;
 
-final class ReaderSource implements CodePointSource {
+/**
+ *
+ * @author fmitchell
+ */
+public abstract class AbstractJsonPullParserFactory implements JsonPullParserFactory {
+    
+    protected static final String UTF8 = "UTF-8";
 
-    private final Reader _reader;
-    private int          _lastChar;
-
-    ReaderSource(Reader s) throws IOException {
-        _reader = s;
-        _lastChar = _reader.read();
+    @Override
+    public JsonPullParser createParser(Reader reader) throws IOException {
+        final ReaderSource source = new ReaderSource(reader);
+        return createParser(source);
     }
 
     @Override
-    public int getCodePoint() {
-        return _lastChar;
+    public JsonPullParser createParser(InputStream input) throws IOException {
+        return createParser(new InputStreamReader(input, UTF8));
     }
 
     @Override
-    public void next() throws IOException {
-        _lastChar = _reader.read();
+    public JsonPullParser createParser(InputStream input, String enc) throws IOException {
+        return createParser(new InputStreamReader(input, enc));
     }
+    
+    /**
+     * Create a parser from a {@link CodePointSource}.
+     * 
+     * @param source a source for Unicode code points.
+     * @return a new JsonPullParser
+     * @throws IOException 
+     */
+    protected abstract JsonPullParser createParser(CodePointSource source) throws IOException;
 }

@@ -50,7 +50,7 @@ Simply put jsonpp.jar (or jsonpp-*version*.jar) in your CLASSPATH somewhere.
 ## USING JSONPP ##
 
 The `com.frank_mitchell.jsonpp` package includes the public API,
-while `com.frank_mitchell.jsonpp.spi` contains the
+while `com.frank_mitchell.jsonpp.spi` contains the implemenation(s).
 
 JSONPP is a "pull parser" because instead of providing input and a callback
 interface like SAX parsers, the caller pulls new tokens or events from the input at
@@ -106,6 +106,6 @@ one or more `PurchaseOrderItem` instances.  A developer can do something like th
         }
 
 Obviously this code needs more error checking and better error reporting.
-It's also not too different from what one may write using JAXP's `JsonParser`.
+It's also not too different from what one may write using JSONP's `JsonParser`.
 
 
