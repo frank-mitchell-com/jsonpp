@@ -71,8 +71,8 @@ final class DefaultJsonPullParser implements JsonPullParser {
         }
     }
 
-    DefaultJsonPullParser(CodePointSource s) throws IOException {
-        this(new CodePointJsonLexer(s));
+    DefaultJsonPullParser(Source s) throws IOException {
+        this(new DefaultJsonLexer(s));
     }
 
     DefaultJsonPullParser(JsonLexer x) throws IOException {

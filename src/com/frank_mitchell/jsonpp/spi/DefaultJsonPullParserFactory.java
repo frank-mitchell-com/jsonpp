@@ -37,7 +37,7 @@ import java.io.IOException;
 public final class DefaultJsonPullParserFactory extends AbstractJsonPullParserFactory {
 
     @Override
-    protected JsonPullParser createParser(final CodePointSource source) throws IOException {
+    protected JsonPullParser createParser(final Source source) throws IOException {
         return new DefaultJsonPullParser(source);
     }
 }

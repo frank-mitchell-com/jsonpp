@@ -24,14 +24,14 @@ package com.frank_mitchell.jsonpp.spi;
 
 import java.io.IOException;
 
-final class CodePointJsonLexer implements JsonLexer {
+final class DefaultJsonLexer implements JsonLexer {
 
     private int                   _tokenType = TOKEN_ERROR;
     private StringBuffer          _tokenBuf  = new StringBuffer();
 
-    private final CodePointSource _source;
+    private final Source _source;
 
-    CodePointJsonLexer(CodePointSource s) {
+    DefaultJsonLexer(Source s) {
         _source = s;
     }
 

@@ -19,47 +19,55 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.jsonpp.test;
 
-import com.frank_mitchell.jsonpp.JsonPullParser;
-import com.frank_mitchell.jsonpp.JsonPullParserFactory;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Collections;
-import java.util.Map;
 
 /**
- *
+ * A reader from an external source.
+ * This allows us to create the reader <strong>first</strong>,
+ * then feed it JSON (or anything else).
+ * 
  * @author fmitchell
  */
-public abstract class AbstractJsonPullParserFactory implements JsonPullParserFactory {
+public class MockReader extends Reader {
     
-    protected static final String UTF8 = "UTF-8";
+    /*
+    The parser likes to read one or two characters ahead, so we'll give
+    it some whitespace until we have real contents.
+    */
+    final StringBuilder _input = new StringBuilder("  ");
+    boolean _closed = false;
+    int _pos = 0;
 
-    @Override
-    public JsonPullParser createParser(Reader reader) throws IOException {
-        final ReaderSource source = new ReaderSource(reader);
-        return createParser(source);
+    public void pushInput(CharSequence input) {
+        _input.append(input);
     }
 
     @Override
-    public JsonPullParser createParser(InputStream input) throws IOException {
-        return createParser(new InputStreamReader(input, UTF8));
+    public int read(char[] chars, int off, int len) throws IOException {
+  
+        if (_closed) {
+            throw new IOException("Hey, we're closed here!");
+        }
+        if (_pos >= _input.length()) {
+            return -1;
+        } else {
+            /*
+             * I *could* figure out the maximum chars I can safely read,
+             * but the implementation only reads one at a time anyway,
+             * so ...
+             */
+            chars[off] = _input.charAt(_pos);
+            _pos += 1;
+            return 1;
+        }
     }
 
     @Override
-    public JsonPullParser createParser(InputStream input, String enc) throws IOException {
-        return createParser(new InputStreamReader(input, enc));
+    public void close() throws IOException {
+        _closed = true;
     }
     
-    /**
-     * Create a parser from a {@link Source}.
-     * 
-     * @param source a source for Unicode code points.
-     * @return a new JsonPullParser
-     * @throws IOException 
-     */
-    protected abstract JsonPullParser createParser(Source source) throws IOException;
 }

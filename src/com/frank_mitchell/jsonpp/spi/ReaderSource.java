@@ -1,38 +1,39 @@
 /*
  * Copyright 2019 Frank Mitchell
  *
- * Permission is hereby granted, free of charge, to any person obtaining a 
- * copy of this software and associated documentation files (the "Software"), 
- * to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
+ *
+ * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
 package com.frank_mitchell.jsonpp.spi;
 
 import java.io.IOException;
 import java.io.Reader;
 
-final class ReaderSource implements CodePointSource {
+final class ReaderSource implements Source {
 
     private final Reader _reader;
-    private int          _lastChar;
+    private int _lastChar;
+    private int _nextChar;
 
     ReaderSource(Reader s) throws IOException {
         _reader = s;
-        _lastChar = _reader.read();
+        _lastChar = ' ';
+        _nextChar = _reader.read();
     }
 
     @Override
@@ -41,7 +42,18 @@ final class ReaderSource implements CodePointSource {
     }
 
     @Override
+    public boolean hasNext() throws IOException {
+        return _nextChar > 0;
+    }
+
+    @Override
     public void next() throws IOException {
-        _lastChar = _reader.read();
+        _lastChar = _nextChar;
+        _nextChar = _reader.read();
+    }
+
+    @Override
+    public void close() throws IOException {
+        _reader.close();
     }
 }

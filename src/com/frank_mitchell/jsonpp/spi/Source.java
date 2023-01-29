@@ -25,7 +25,7 @@ package com.frank_mitchell.jsonpp.spi;
 import java.io.IOException;
 
 /**
- * An iterator for a sequence of Unicode code points.
+ * An iterator over an external sequence of Unicode code points.
  * Using <code>int</code> instead of <code>char</code> is a bit of 
  * future-proofing for when streams commonly contain characters
  * outside of the Basic Multilingual Plane (0x0000 - 0xFFFF).
@@ -40,7 +40,7 @@ import java.io.IOException;
  * 
  * @author Frank Mitchell
  */
-public interface CodePointSource {
+public interface Source {
 
     /**
      * Read the current code point after the last call to {@link #next()}.
@@ -51,10 +51,14 @@ public interface CodePointSource {
 
     /**
      * Whether this source still has code points remaining.
+     * This method may read ahead to the next character, which may
+     * cause an exception.
      * 
-     * @return current code point.
+     * @return whether this object has a next code point.
+     * 
+     * @throws java.io.IOException if read-ahead throws an exception
      */
-    //boolean hasNext() throws IOException;
+    boolean hasNext() throws IOException;
 
     /**
      * Get the next code point.
@@ -62,4 +66,11 @@ public interface CodePointSource {
      * @throws IOException 
      */
     void next() throws IOException;
+   
+    /**
+     * Close the underlying IO or NIO object.
+     * 
+     * @throws IOException from the underlying object.
+     */
+    void close() throws IOException;
  }

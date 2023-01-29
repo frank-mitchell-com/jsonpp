@@ -1,20 +1,21 @@
 ## Compile and Install
 
 * Create `build.xml` to run tests and create `jsonpp-${VERSION}.jar`.
+  (Independent of Eclipse, NetBeans, etc.)
 
   - read version from VERSION.txt
-
-  - include the Ant jar?
 
 * Use maven instead?
 
 
 ## API
 
-* Add CodePointSource and AbstractJsonPullParserFactory to the public API?
+* Add Source and AbstractJsonPullParserFactory to the public API?
 
 * build `JsonEmitter` that writes events as JSON to Writer, OutputStream, 
   or CharBuffer.
+
+  - complementary "Sink" interface to wrap Writers and OutputStreams.
 
   - use javax.json.stream.JsonGenerator for inspiration.
 
@@ -22,7 +23,7 @@
 
   - pretty printing?
 
-  - write UTF-8 directly without Writer?
+  - ByteSink to write UTF-8 directly without Writer?
 
 
 ## Internals
@@ -78,5 +79,3 @@
 ## Documentation
 
 * add example code, including a general Maps and Lists builder.
-
-
