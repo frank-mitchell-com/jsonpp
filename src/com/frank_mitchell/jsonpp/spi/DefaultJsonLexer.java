@@ -24,14 +24,16 @@ package com.frank_mitchell.jsonpp.spi;
 
 import java.io.IOException;
 
+import com.frank_mitchell.jsonpp.CodePointSource;
+
 final class DefaultJsonLexer implements JsonLexer {
 
     private int                   _tokenType = TOKEN_ERROR;
     private StringBuffer          _tokenBuf  = new StringBuffer();
 
-    private final Source _source;
+    private final CodePointSource _source;
 
-    DefaultJsonLexer(Source s) {
+    DefaultJsonLexer(CodePointSource s) {
         _source = s;
     }
 
@@ -346,5 +348,9 @@ final class DefaultJsonLexer implements JsonLexer {
             default:
                 return false;
         }
+    }
+    @Override
+    public void close() throws IOException {
+        _source.close();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Frank Mitchell
+ * Copyright 2023 Frank Mitchell
  *
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"), 
@@ -19,27 +19,31 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
+package com.frank_mitchell.jsonpp;
 
-package com.frank_mitchell.jsonpp.spi;
-
-import com.frank_mitchell.jsonpp.JsonPullParser;
-import com.frank_mitchell.jsonpp.JsonPullParserFactory;
-import com.frank_mitchell.jsonpp.CodePointSource;
-
+import java.io.Closeable;
+import java.io.Flushable;
 import java.io.IOException;
 
 /**
- * A {@link JsonPullParserFactory} for the default implementation.
- *
- * Only this class is public because extending the others is at best
- * useless and at worst a source of bugs.
- *
+ * Write Unicode code points to external output.
+ * 
  * @author Frank Mitchell
  */
-public final class DefaultJsonPullParserFactory extends AbstractJsonPullParserFactory {
-
-    @Override
-    public JsonPullParser createParser(final CodePointSource source) throws IOException {
-        return new DefaultJsonPullParser(source);
+public interface CodePointSink extends Appendable, Flushable, Closeable {
+    void putCodePoint(int cp) throws IOException;
+    
+    default void putCodePoints(int[] cpbuf, int offset, int len) throws IOException {
+        for (int i = offset; i < len; i++) {
+            putCodePoint(cpbuf[i]);
+        }
     }
+
+    void putCharSequence(CharSequence seq) throws IOException;
+
+    void putChars(char[] cbuf, int offset, int len) throws IOException;
+
+    void flush() throws IOException;
+    
+    void close() throws IOException;
 }

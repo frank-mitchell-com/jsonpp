@@ -10,20 +10,11 @@
 
 ## API
 
-* Add Source and AbstractJsonPullParserFactory to the public API?
+* Spawn a sub-parser / sub-emitter to hand off to another module.
+  E.g. in JSON-RPC one part of the code handles the envelope, another
+  processes the procedure and arguments.
 
-* build `JsonEmitter` that writes events as JSON to Writer, OutputStream, 
-  or CharBuffer.
-
-  - complementary "Sink" interface to wrap Writers and OutputStreams.
-
-  - use javax.json.stream.JsonGenerator for inspiration.
-
-  - API to complete one or all open brackets / braces.
-
-  - pretty printing?
-
-  - ByteSink to write UTF-8 directly without Writer?
+* Add AbstractJson...Factory to the public API?
 
 
 ## Internals
@@ -72,8 +63,6 @@
 * create `JsonProvider` and wrap with whole JSONP API.
 
 * put JSONP API into separate jar?
-
-* add JSONP API into one big jar?
 
 
 ## Documentation

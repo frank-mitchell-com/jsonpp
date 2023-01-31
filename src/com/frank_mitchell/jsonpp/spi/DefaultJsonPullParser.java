@@ -23,6 +23,8 @@ package com.frank_mitchell.jsonpp.spi;
 
 import com.frank_mitchell.jsonpp.JsonEvent;
 import com.frank_mitchell.jsonpp.JsonPullParser;
+import com.frank_mitchell.jsonpp.CodePointSource;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
@@ -71,7 +73,7 @@ final class DefaultJsonPullParser implements JsonPullParser {
         }
     }
 
-    DefaultJsonPullParser(Source s) throws IOException {
+    DefaultJsonPullParser(CodePointSource s) throws IOException {
         this(new DefaultJsonLexer(s));
     }
 
@@ -361,5 +363,11 @@ final class DefaultJsonPullParser implements JsonPullParser {
             default:
                 return false;
         }
+    }
+    
+    @Override
+    public void close() throws IOException {
+        _lexer.close();
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

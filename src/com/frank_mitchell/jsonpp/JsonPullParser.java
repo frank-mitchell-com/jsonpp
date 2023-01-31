@@ -29,13 +29,13 @@ import java.math.BigDecimal;
  * This interface traverses a JSON Value as a stream of events.
  * 
  * Each call to {@link #next()} moves to the next event in the
- * stream, and the various "get" methods identify the type of
- * event, the value of a String or Number, and/or the name of a key
- * String.
- * 
- * Implementations of this interface aren't guaranteed to be thread safe.
- * In most cases one thread will parse an input stream and then discard
- * this parser. In some cases one thread <strong>might</strong> hand
+ stream, and the various "get" methods identify the type of
+ event, the value of a String or Number, and/or the name of a key
+ String.
+ 
+ Implementations of this interface aren't guaranteed to be thread safe.
+ In most cases one thread will parse an input stream and then discard
+ this parser. In some cases one thread <strong>might</strong> hand
  * a parser off to another thread, then continue parsing once that thread
  * has finished. (In the latter case a co-routine or cooperative 
  * single-threaded framework might be more efficient.)
@@ -209,4 +209,11 @@ public interface JsonPullParser {
         next();
         return getEvent();
     }
+     
+    /**
+     * Close the underlying IO or NIO object.
+     * 
+     * @throws IOException from the underlying object.
+     */
+    void close() throws IOException;
 }

@@ -20,9 +20,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.jsonpp;
 
+import java.io.Closeable;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * An iterator over an external sequence of Unicode code points.
@@ -40,7 +42,7 @@ import java.io.IOException;
  * 
  * @author Frank Mitchell
  */
-public interface Source {
+public interface CodePointSource extends Closeable {
 
     /**
      * Read the current code point after the last call to {@link #next()}.
@@ -72,5 +74,6 @@ public interface Source {
      * 
      * @throws IOException from the underlying object.
      */
+    @Override
     void close() throws IOException;
  }

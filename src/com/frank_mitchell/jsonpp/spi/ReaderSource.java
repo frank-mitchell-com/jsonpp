@@ -22,34 +22,69 @@
 package com.frank_mitchell.jsonpp.spi;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
-final class ReaderSource implements Source {
+import com.frank_mitchell.jsonpp.CodePointSource;
+
+public final class ReaderSource implements CodePointSource {
 
     private final Reader _reader;
     private int _lastChar;
     private int _nextChar;
 
-    ReaderSource(Reader s) throws IOException {
-        _reader = s;
+    public ReaderSource(Reader r) throws IOException {
+        _reader = r;
         _lastChar = ' ';
         _nextChar = _reader.read();
+    }
+    
+    public ReaderSource(InputStream s) throws IOException {
+        this(s, StandardCharsets.UTF_8);
+    }
+    
+    public ReaderSource(InputStream s, Charset e) throws IOException {
+        this(new InputStreamReader(s, e));
+    }
+    
+    private Object getLock() {
+        return this;
     }
 
     @Override
     public int getCodePoint() {
-        return _lastChar;
+        /*
+         * TODO: The user shouldn't be able to call this method
+         * before calling next(), and yet they do. That's why
+         * _lastChar is set to ' '. Fixing this will require
+         * rewriting DefaultJsonLexer, though. 
+         */
+        synchronized (getLock()) {
+            return _lastChar;
+        }
     }
 
     @Override
     public boolean hasNext() throws IOException {
-        return _nextChar > 0;
+        synchronized (getLock()) {
+            return _nextChar > 0;
+        }
     }
 
     @Override
     public void next() throws IOException {
-        _lastChar = _nextChar;
-        _nextChar = _reader.read();
+        synchronized (getLock()) {
+            _lastChar = _nextChar;
+            /*
+             * TODO: If _nextChar is part of a multi-byte UTF-16
+             * code point, read the next char and decode them.
+             * We are reading code points, after all.
+             */
+            _nextChar = _reader.read();
+        }
     }
 
     @Override

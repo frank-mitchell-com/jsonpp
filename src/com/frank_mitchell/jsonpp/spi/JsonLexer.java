@@ -45,4 +45,6 @@ interface JsonLexer {
     CharSequence getToken();
 
     int getTokenType();
+    
+    void close() throws IOException;
 }

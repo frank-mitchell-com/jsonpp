@@ -24,6 +24,7 @@ package com.frank_mitchell.jsonpp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -40,7 +41,7 @@ public interface JsonPullParserFactory {
      *
      * @param reader a stream of UTF-16 characters to parse
      * @return new parser
-     * @throws java.io.IOException
+     * @throws IOException if source throws an IOException
      */
     JsonPullParser createParser(Reader reader) throws IOException;
 
@@ -49,9 +50,9 @@ public interface JsonPullParserFactory {
      *
      * @param input a stream of ASCII or UTF-8 bytes
      * @return new parser
-     * @throws java.io.IOException
+     * @throws IOException if source throws an IOException
      */
-    JsonPullParser createParser(InputStream input) throws IOException;
+    JsonPullParser createUtf8Parser(InputStream input) throws IOException;
 
     /**
      * Create a parser to process an encoded byte stream.
@@ -59,8 +60,18 @@ public interface JsonPullParserFactory {
      * @param input a stream of encoded bytes to parse
      * @param enc   the standard name for the stream's encoding
      * @return new parser
-     * @throws java.io.IOException
+     * @throws IOException if source throws an IOException
      */
-    JsonPullParser createParser(InputStream input, String enc) throws IOException;
+    JsonPullParser createParser(InputStream input, Charset enc) throws IOException;
+
+    /**
+     * Create a parser to process a stream of Unicode code points.
+     *
+     * @param source provider of code points
+     * @return new parser
+     * @throws IOException if source throws an IOException
+     */
+    JsonPullParser createParser(CodePointSource source) throws IOException;
+
 
 }
