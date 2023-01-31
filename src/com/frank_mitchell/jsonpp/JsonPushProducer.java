@@ -1,6 +1,9 @@
 package com.frank_mitchell.jsonpp;
 
+import java.io.Closeable;
+import java.io.Flushable;
 import java.io.IOException;
+import java.io.Writer;
 
 /**
  * Instances of this class write JSON to an IO object. The application sets the
@@ -10,7 +13,7 @@ import java.io.IOException;
  *
  * @author Frank Mitchell
  */
-public interface JsonPushProducer {
+public interface JsonPushProducer extends Flushable, Closeable {
 
     /**
      * Set the event to be emitted on the next {@link #push()}

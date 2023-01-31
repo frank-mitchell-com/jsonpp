@@ -22,6 +22,7 @@
 
 package com.frank_mitchell.jsonpp;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -29,13 +30,13 @@ import java.math.BigDecimal;
  * This interface traverses a JSON Value as a stream of events.
  * 
  * Each call to {@link #next()} moves to the next event in the
- stream, and the various "get" methods identify the type of
- event, the value of a String or Number, and/or the name of a key
- String.
- 
- Implementations of this interface aren't guaranteed to be thread safe.
- In most cases one thread will parse an input stream and then discard
- this parser. In some cases one thread <strong>might</strong> hand
+ * stream, and the various "get" methods identify the type of
+ * event, the value of a String or Number, and/or the name of a key
+ * String.
+ *
+ * Implementations of this interface aren't guaranteed to be thread safe.
+ * In most cases one thread will parse an input stream and then discard
+ * this parser. In some cases one thread <strong>might</strong> hand
  * a parser off to another thread, then continue parsing once that thread
  * has finished. (In the latter case a co-routine or cooperative 
  * single-threaded framework might be more efficient.)
@@ -43,7 +44,7 @@ import java.math.BigDecimal;
  * @author Frank Mitchell
  *
  */
-public interface JsonPullParser {
+public interface JsonPullParser extends Closeable {
 
     /**
      * Get the event parsed by the most recent call to {@link #next()}.
@@ -103,7 +104,7 @@ public interface JsonPullParser {
      * or if there is no immediately enclosing JSON object,
      * this method returns <code>null</code>;
      * 
-     * @return  the value of a String or Number or <code>null<code> 
+     * @return  the value of a String or Number or <code>null</code> 
      */
     public String getCurrentKey();
 
@@ -123,7 +124,7 @@ public interface JsonPullParser {
      * 
      * Otherwise the method throws an exception
      * 
-     * @return  the value of a String or Number or <code>null<code> 
+     * @return  the value of a String or Number or <code>null</code> 
      * 
      * @throws IllegalStateException if the current event has no string value.
      */
