@@ -21,6 +21,7 @@
  */
 package com.frank_mitchell.jsonpp;
 
+import com.frank_mitchell.codepoint.CodePointSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;

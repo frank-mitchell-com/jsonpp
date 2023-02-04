@@ -21,37 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.jsonpp.test;
 
-import com.frank_mitchell.codepoint.spi.WriterSink;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import com.frank_mitchell.jsonpp.JsonEvent;
 import com.frank_mitchell.jsonpp.JsonPushProducer;
 import com.frank_mitchell.jsonpp.JsonPushProducerFactory;
+import com.frank_mitchell.jsonpp.spi.DefaultJsonPushProducerFactory;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
  * @author fmitchell
  */
-public abstract class AbstractJsonPushProducerFactory implements JsonPushProducerFactory {
+public class DefaultJsonPushProducerTest {
     
-    @Override
-    public JsonPushProducer createProducer(Writer writer) throws IOException {
-        return createProducer(new WriterSink(writer));
-    }
-
-    @Override
-    public JsonPushProducer createProducer(OutputStream out, Charset enc) throws IOException {
-        return createProducer(new WriterSink(new OutputStreamWriter(out, enc)));
-    }
-
-    @Override
-    public JsonPushProducer createUtf8Producer(OutputStream out) throws IOException {
-        return createProducer(out, StandardCharsets.UTF_8);
+    JsonPushProducerFactory _factory;
+    CharArrayWriter _writer;
+    JsonPushProducer _producer;
+    
+    @Before
+    public void setUp() throws Exception {
+        _factory = new DefaultJsonPushProducerFactory();
+        _writer = new CharArrayWriter();
+        _producer = _factory.createProducer(_writer);
     }
     
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void testSimpleArray() throws IOException {
+        _producer.setEvent(JsonEvent.START_ARRAY);
+        _producer.push();
+        _producer.setEvent(JsonEvent.END_ARRAY);
+        _producer.push();
+        
+        assertEquals("[]", _writer.toString());
+    }    
 }

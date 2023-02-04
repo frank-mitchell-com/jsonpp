@@ -21,37 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.codepoint.spi;
 
-import com.frank_mitchell.codepoint.spi.WriterSink;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import com.frank_mitchell.jsonpp.JsonPushProducer;
-import com.frank_mitchell.jsonpp.JsonPushProducerFactory;
+import java.nio.IntBuffer;
 
 /**
- *
- * @author fmitchell
+ * Wraps an IntStream with Unicode code points.
+ * 
+ * @author Frank Mitchell
  */
-public abstract class AbstractJsonPushProducerFactory implements JsonPushProducerFactory {
+public class IntBufferSink extends AbstractSink {
+    private final IntBuffer _buf;
+    
+    public IntBufferSink(IntBuffer b) {
+        _buf = b;
+    }
     
     @Override
-    public JsonPushProducer createProducer(Writer writer) throws IOException {
-        return createProducer(new WriterSink(writer));
+    public void putCodePoint(int cp) throws IOException {
+        _buf.put(cp);
     }
 
     @Override
-    public JsonPushProducer createProducer(OutputStream out, Charset enc) throws IOException {
-        return createProducer(new WriterSink(new OutputStreamWriter(out, enc)));
+    public void flush() throws IOException {
     }
 
     @Override
-    public JsonPushProducer createUtf8Producer(OutputStream out) throws IOException {
-        return createProducer(out, StandardCharsets.UTF_8);
+    public void close() {
     }
-    
 }

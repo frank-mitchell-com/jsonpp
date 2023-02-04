@@ -21,12 +21,13 @@
  */
 package com.frank_mitchell.jsonpp.spi;
 
+import com.frank_mitchell.codepoint.spi.ReaderSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
-import com.frank_mitchell.jsonpp.CodePointSource;
+import com.frank_mitchell.codepoint.CodePointSource;
 import com.frank_mitchell.jsonpp.JsonPullParser;
 import com.frank_mitchell.jsonpp.JsonPullParserFactory;
 

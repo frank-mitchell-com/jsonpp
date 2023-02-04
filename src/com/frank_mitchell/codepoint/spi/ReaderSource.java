@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.codepoint.spi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import com.frank_mitchell.jsonpp.CodePointSource;
+import com.frank_mitchell.codepoint.CodePointSource;
 
 public final class ReaderSource implements CodePointSource {
 
@@ -38,8 +38,8 @@ public final class ReaderSource implements CodePointSource {
 
     public ReaderSource(Reader r) throws IOException {
         _reader = r;
-        _lastChar = ' ';
-        _nextChar = _reader.read();
+        _lastChar = -1;
+        _nextChar = -1;
     }
     
     public ReaderSource(InputStream s) throws IOException {
@@ -63,6 +63,9 @@ public final class ReaderSource implements CodePointSource {
          * rewriting DefaultJsonLexer, though. 
          */
         synchronized (getLock()) {
+            if (_lastChar < 0) {
+                throw new IllegalStateException("have not called next() yet");
+            }
             return _lastChar;
         }
     }
@@ -70,6 +73,9 @@ public final class ReaderSource implements CodePointSource {
     @Override
     public boolean hasNext() throws IOException {
         synchronized (getLock()) {
+            if (_nextChar < 0) {
+                _nextChar = _reader.read();
+            }
             return _nextChar > 0;
         }
     }
@@ -77,13 +83,17 @@ public final class ReaderSource implements CodePointSource {
     @Override
     public void next() throws IOException {
         synchronized (getLock()) {
-            _lastChar = _nextChar;
+            if (_nextChar > 0) {
+                _lastChar = _nextChar;
+            } else {
+                _nextChar = _reader.read();
+            }
+            _nextChar = -1;
             /*
-             * TODO: If _nextChar is part of a multi-byte UTF-16
+             * TODO: If _lastChar is part of a multi-byte UTF-16
              * code point, read the next char and decode them.
              * We are reading code points, after all.
              */
-            _nextChar = _reader.read();
         }
     }
 

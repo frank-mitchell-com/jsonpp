@@ -24,14 +24,15 @@ package com.frank_mitchell.jsonpp.spi;
 
 import java.io.IOException;
 
-import com.frank_mitchell.jsonpp.CodePointSource;
+import com.frank_mitchell.codepoint.CodePointSource;
 
 final class DefaultJsonLexer implements JsonLexer {
 
-    private int                   _tokenType = TOKEN_ERROR;
-    private StringBuffer          _tokenBuf  = new StringBuffer();
-
+    private final StringBuilder _tokenBuf  = new StringBuilder();
     private final CodePointSource _source;
+    
+    private int _tokenType = TOKEN_ERROR;
+    private boolean _pushback = false;
 
     DefaultJsonLexer(CodePointSource s) {
         _source = s;
@@ -52,6 +53,15 @@ final class DefaultJsonLexer implements JsonLexer {
         _tokenType = TOKEN_ERROR;
         _tokenBuf.setLength(0);
 
+        if (!_source.hasNext()) {
+            _tokenType = TOKEN_EOF;
+            return;
+        }
+        if (_pushback) {
+            _pushback = false;
+        } else {
+            _source.next();
+        }
         int c = _source.getCodePoint();
 
         while (c >= 0 && isJsonWhitespace(c)) {
@@ -68,32 +78,26 @@ final class DefaultJsonLexer implements JsonLexer {
             case '[':
                 _tokenType = TOKEN_ARR_OPEN;
                 _tokenBuf.append((char) c);
-                _source.next();
                 break;
             case ']':
                 _tokenType = TOKEN_ARR_CLOSE;
                 _tokenBuf.append((char) c);
-                _source.next();
                 break;
             case '{':
                 _tokenType = TOKEN_OBJ_OPEN;
                 _tokenBuf.append((char) c);
-                _source.next();
                 break;
             case '}':
                 _tokenType = TOKEN_OBJ_CLOSE;
                 _tokenBuf.append((char) c);
-                _source.next();
                 break;
             case ',':
                 _tokenType = TOKEN_COMMA;
                 _tokenBuf.append((char) c);
-                _source.next();
                 break;
             case ':':
                 _tokenType = TOKEN_COLON;
                 _tokenBuf.append((char) c);
-                _source.next();
                 break;
             case '-':
             case '0':
@@ -192,7 +196,15 @@ final class DefaultJsonLexer implements JsonLexer {
             _tokenBuf.append((char) c);
             _source.next();
         }
+        if (isKeywordCharacter(_source.getCodePoint())) {
+            return TOKEN_ERROR;
+        }
+        _pushback = true;
         return type;
+    }
+
+    private static boolean isKeywordCharacter(final int c) {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
 
     private int readNumber() throws IOException {
@@ -262,7 +274,7 @@ final class DefaultJsonLexer implements JsonLexer {
                 c = _source.getCodePoint();
             }
         }
-
+        _pushback = true;
         return TOKEN_NUMBER;
     }
 
@@ -302,7 +314,6 @@ final class DefaultJsonLexer implements JsonLexer {
 
         } while (c != '"');
 
-        _source.next();
         return result;
     }
 

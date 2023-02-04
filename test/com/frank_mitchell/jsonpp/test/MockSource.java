@@ -21,53 +21,63 @@
  */
 package com.frank_mitchell.jsonpp.test;
 
+import com.frank_mitchell.codepoint.CodePointSource;
 import java.io.IOException;
-import java.io.Reader;
+import static org.junit.Assert.assertTrue;
 
 /**
- * A reader from an external source.
+ * A mock code point source that reads from a StringBuilder.
  * This allows us to create the reader <strong>first</strong>,
  * then feed it JSON (or anything else).
  * 
  * @author fmitchell
  */
-public class MockReader extends Reader {
+public class MockSource implements CodePointSource {
     
     /*
     The parser likes to read one or two characters ahead, so we'll give
     it some whitespace until we have real contents.
     */
-    final StringBuilder _input = new StringBuilder("  ");
+    final CharSequence _input;
     boolean _closed = false;
-    int _pos = 0;
-
-    public void pushInput(CharSequence input) {
-        _input.append(input);
+    boolean _nextCalled = false;
+    int _pos = -1;
+    
+    public MockSource(CharSequence s) {
+        _input = s;
     }
 
     @Override
-    public int read(char[] chars, int off, int len) throws IOException {
-  
-        if (_closed) {
-            throw new IOException("Hey, we're closed here!");
-        }
-        if (_pos >= _input.length()) {
-            return -1;
+    public int getCodePoint() {
+        assertTrue("should not be closed!", !_closed);
+        assertTrue("next provides next character", _nextCalled);
+        assertTrue("advanced beyond the end of input", _pos <= _input.length());
+
+        // If we're testing something outside the Basic Multilingual Plane
+        // this may need more code ... unlike a real mock object.
+        if (_pos < _input.length()) {
+            return _input.charAt(_pos);
         } else {
-            /*
-             * I *could* figure out the maximum chars I can safely read,
-             * but the implementation only reads one at a time anyway,
-             * so ...
-             */
-            chars[off] = _input.charAt(_pos);
-            _pos += 1;
-            return 1;
+            return -1;
         }
     }
 
     @Override
-    public void close() throws IOException {
-        _closed = true;
+    public boolean hasNext() throws IOException {
+        assertTrue("should not be closed!", !_closed);
+        return (_pos + 1 < _input.length());
+    }
+
+    @Override
+    public void next() throws IOException {
+        assertTrue("should not be closed!", !_closed);
+        _nextCalled = true;
+        _pos++;
     }
     
+    @Override
+    public void close() throws IOException {
+        assertTrue("should not be closed!", !_closed);
+        _closed = true;
+    }
 }

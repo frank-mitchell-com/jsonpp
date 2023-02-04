@@ -1,4 +1,4 @@
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.codepoint.spi;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,16 +19,27 @@ public class WriterSink extends AbstractSink {
     /**
      * Wrap this object around a writer.
      *
-     * @param writer
+     * @param writer the writer
      */
     public WriterSink(Writer writer) {
         _writer = writer;
     }
 
+    /**
+     * Wrap this object around a UTF-8 output stream.
+     *
+     * @param os the output stream
+     */
     public WriterSink(OutputStream os) {
         this(os, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Wrap this object around an arbitrarily encoded output stream.
+     *
+     * @param os the output stream
+     * @param cs the character set for outgoing bytes
+     */
     public WriterSink(OutputStream os, Charset cs) {
         this(new OutputStreamWriter(os, cs));
     }

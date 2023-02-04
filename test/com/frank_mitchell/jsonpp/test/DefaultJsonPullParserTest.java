@@ -42,20 +42,22 @@ public class DefaultJsonPullParserTest {
 
     private JsonPullParserFactory _factory;
     private JsonPullParser _parser;
-    private MockReader _mockReader;
+    private StringBuffer _buffer;
+    private MockSource _mockSource;
 
     @Before
     public void setUp() throws IOException {
         _factory = getJsonPullParserFactory();
-        _mockReader = new MockReader();
-        _parser = _factory.createParser(_mockReader);
+        _buffer = new StringBuffer("  ");
+        _mockSource = new MockSource(_buffer);
+        _parser = _factory.createParser(_mockSource);
     }
 
     @After
     public void tearDown() {
         _factory = null;
         _parser = null;
-        _mockReader = null;
+        _mockSource = null;
     }
 
     /**
@@ -68,9 +70,13 @@ public class DefaultJsonPullParserTest {
         return new DefaultJsonPullParserFactory();
     }
 
+    public void push(CharSequence s) {
+        _buffer.append(s);
+    }
+    
     @Test
     public void parseArray() throws IOException {
-        _mockReader.pushInput("[321, \"a string\", true, false, null]");
+        push("[321, \"a string\", true, false, null]");
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -104,7 +110,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseArrayMissingComma() throws IOException {
-        _mockReader.pushInput("[ true , false null ]");
+        push("[ true , false null ]");
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -121,7 +127,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseEmptyArray() throws IOException {
-        _mockReader.pushInput("[]");
+        push("[]");
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -137,7 +143,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseEmptyObject() throws IOException {
-        _mockReader.pushInput("{}");
+        push("{}");
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -153,7 +159,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseObject() throws IOException {
-        _mockReader.pushInput("{"
+        push("{"
                 + "\"alpha\":   \"a string\", \n"
                 + "\"bravo\":   213, \n"
                 + "\"charlie\": true, \n"
@@ -213,7 +219,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseNestedObjectsAndArrays() throws IOException {
-        _mockReader.pushInput("{\n"
+        push("{\n"
                 + "\t\"alpha\":   \"a string\", \n"
                 + "\t\"bravo\":   { \n"
                 + "\t\t\"charlie\": true, \n"
@@ -320,7 +326,7 @@ public class DefaultJsonPullParserTest {
      * @throws IOException
      */
     protected void testSingleString(String value, String json) throws IOException {
-        _mockReader.pushInput(json);
+        push(json);
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -361,7 +367,7 @@ public class DefaultJsonPullParserTest {
      * @throws IOException from the parser
      */
     public void testSingleNumber(String number, String json) throws IOException {
-        _mockReader.pushInput(json);
+        push(json);
         BigDecimal decimal = new BigDecimal(number);
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
@@ -407,7 +413,7 @@ public class DefaultJsonPullParserTest {
      * @throws IOException from the parser
      */
     protected void testSingleValue(JsonEvent ev, String json) throws IOException {
-        _mockReader.pushInput(json);
+        push(json);
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -445,7 +451,7 @@ public class DefaultJsonPullParserTest {
      * @throws IOException from the parser.
      */
     protected void testSingleError(String json) throws IOException {
-        _mockReader.pushInput(json);
+        push(json);
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -455,7 +461,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseArrayCloseError() throws IOException {
-        _mockReader.pushInput("[[[true]}]");
+        push("[[[true]}]");
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -480,7 +486,7 @@ public class DefaultJsonPullParserTest {
 
     @Test
     public void parseObjectCloseError() throws IOException {
-        _mockReader.pushInput("{\"a\":{\"b\":{\"c\":true}]}");
+        push("{\"a\":{\"b\":{\"c\":true}]}");
 
         assertEquals("event", JsonEvent.START_STREAM, _parser.getEvent());
 
@@ -515,7 +521,7 @@ public class DefaultJsonPullParserTest {
     @Test
 
     public void parseGetCurrentKey() throws IOException {
-        _mockReader.pushInput("["
+        push("["
                 + "{"
                 + "\"foo\": 1, \"bar\": 2, \"baz\": "
                 + "{"

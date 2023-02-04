@@ -1,9 +1,9 @@
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.codepoint.spi;
 
 import java.io.IOException;
 import java.util.PrimitiveIterator;
 
-import com.frank_mitchell.jsonpp.CodePointSink;
+import com.frank_mitchell.codepoint.CodePointSink;
 
 public abstract class AbstractSink implements CodePointSink {
 

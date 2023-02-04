@@ -19,11 +19,12 @@
 
 ## Internals
 
+* Rewrite the current Lexer to *NOT* call `getCodePoint()` until after it calls
+  `next()`, so we don't have to load up a first character at the start.
+
 * Make tracking the current key a/or index optional, to save time and space.
 
 * Create alternate `JsonLexer` that uses regular expressions.
-
-* Create `UtfInputStreamSource` to convert UTF-8 bytes directly into code points.
 
 * Define configurable properties on `JsonParserFactory`.
 
@@ -62,7 +63,7 @@
 
 * create `JsonProvider` and wrap with whole JSONP API.
 
-* put JSONP API into separate jar?
+* put JSONP API implementation into separate jar?
 
 
 ## Documentation

@@ -21,37 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
+package com.frank_mitchell.codepoint.spi;
 
-import com.frank_mitchell.codepoint.spi.WriterSink;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import com.frank_mitchell.jsonpp.JsonPushProducer;
-import com.frank_mitchell.jsonpp.JsonPushProducerFactory;
+import java.nio.CharBuffer;
+import java.util.PrimitiveIterator;
 
 /**
- *
+ * Writes code points to a Byte Buffer.
+ * 
  * @author fmitchell
  */
-public abstract class AbstractJsonPushProducerFactory implements JsonPushProducerFactory {
+public class CharBufferSink extends AbstractSink {
+    private final CharBuffer _cbuf;
     
-    @Override
-    public JsonPushProducer createProducer(Writer writer) throws IOException {
-        return createProducer(new WriterSink(writer));
+    public CharBufferSink(CharBuffer cb) {
+        _cbuf = cb;
     }
 
     @Override
-    public JsonPushProducer createProducer(OutputStream out, Charset enc) throws IOException {
-        return createProducer(new WriterSink(new OutputStreamWriter(out, enc)));
+    public void putCodePoint(int cp) throws IOException {
+        if (Character.isBmpCodePoint(cp)) {
+            _cbuf.put((char)cp);            
+        } else {
+            int[] iarray = { cp };
+            String str = new String(iarray, 0, iarray.length);
+            _cbuf.put(str);
+        }
     }
 
     @Override
-    public JsonPushProducer createUtf8Producer(OutputStream out) throws IOException {
-        return createProducer(out, StandardCharsets.UTF_8);
+    public void putChars(final char[] cbuf, final int offset, final int len) throws IOException {
+        _cbuf.put(cbuf, offset, len);
+    }
+
+    @Override
+    public void putCharSequence(CharSequence seq) throws IOException {
+        // No point in converting if we'll just convert them back
+        PrimitiveIterator.OfInt iter = seq.chars().iterator();
+        while (iter.hasNext()) {
+            _cbuf.put((char)iter.nextInt());
+        }
+    }
+
+    @Override
+    public void flush() throws IOException {
+    }
+
+    @Override
+    public void close() throws IOException {
     }
     
 }

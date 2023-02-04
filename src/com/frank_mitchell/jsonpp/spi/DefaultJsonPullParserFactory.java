@@ -24,7 +24,7 @@ package com.frank_mitchell.jsonpp.spi;
 
 import com.frank_mitchell.jsonpp.JsonPullParser;
 import com.frank_mitchell.jsonpp.JsonPullParserFactory;
-import com.frank_mitchell.jsonpp.CodePointSource;
+import com.frank_mitchell.codepoint.CodePointSource;
 
 import java.io.IOException;
 

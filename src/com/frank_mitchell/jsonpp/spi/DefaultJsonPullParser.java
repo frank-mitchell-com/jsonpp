@@ -23,7 +23,7 @@ package com.frank_mitchell.jsonpp.spi;
 
 import com.frank_mitchell.jsonpp.JsonEvent;
 import com.frank_mitchell.jsonpp.JsonPullParser;
-import com.frank_mitchell.jsonpp.CodePointSource;
+import com.frank_mitchell.codepoint.CodePointSource;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -273,7 +273,7 @@ final class DefaultJsonPullParser implements JsonPullParser {
         int pos = sb.indexOf("\\");
         String s;
 
-        while (pos >= 0) {
+        while (pos >= 0 && pos <= sb.length()) {
             char c = sb.charAt(pos + 1);
             switch (c) {
                 case '\\':

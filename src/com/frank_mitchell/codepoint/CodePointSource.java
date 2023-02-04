@@ -20,7 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package com.frank_mitchell.jsonpp;
+package com.frank_mitchell.codepoint;
 
 import java.io.Closeable;
 import java.io.IOException;

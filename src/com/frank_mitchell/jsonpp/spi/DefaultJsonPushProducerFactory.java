@@ -23,7 +23,7 @@
  */
 package com.frank_mitchell.jsonpp.spi;
 
-import com.frank_mitchell.jsonpp.CodePointSink;
+import com.frank_mitchell.codepoint.CodePointSink;
 import java.io.IOException;
 import com.frank_mitchell.jsonpp.JsonPushProducer;
 
