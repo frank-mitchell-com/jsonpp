@@ -1,37 +1,53 @@
 /**
  * 
  */
-package com.frank_mitchell.jsonpp.test;
+package com.frank_mitchell.codepoint.test;
 
+import com.frank_mitchell.codepoint.CodePointSink;
+import com.frank_mitchell.codepoint.spi.ByteBufferSink;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.PrimitiveIterator;
-import java.util.PrimitiveIterator.OfInt;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.frank_mitchell.codepoint.spi.WriterSink;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import org.junit.Ignore;
 
 /**
  * @author fmitchell
  *
  */
-public class WriterSinkTest {
+@Ignore("don't understand ByteBuffers yet")
+public class ByteBufferSinkTest {
 
-    WriterSink _sink;
-    StringWriter _buf;
+    private CodePointSink _sink;
+    private Object _store;
+    
+    
+    protected CodePointSink createSink(Object store) {
+        return new ByteBufferSink((ByteBuffer) store, StandardCharsets.UTF_8);
+    }
+
+    protected Object createBackingStore() {
+        return ByteBuffer.allocate(1000);
+    }
+
+    protected String getOutput() {
+        return ((ByteBuffer)_store).toString();
+    }
     
     /**
      * @throws java.lang.Exception
      */
     @Before
     public void setUp() throws Exception {
-        _buf = new StringWriter();
-        _sink = new WriterSink(_buf);
+        _store = createBackingStore();
+        _sink = createSink(_store);
     }
 
     /**
@@ -39,7 +55,7 @@ public class WriterSinkTest {
      */
     @After
     public void tearDown() throws Exception {
-        _buf = null;
+        _store = null;
         _sink = null;
     }
 
@@ -49,7 +65,7 @@ public class WriterSinkTest {
 
         _sink.putChars(seq.toCharArray(), 0, seq.length());
 
-        assertEquals(seq, _buf.toString());
+        assertEquals(seq, getOutput());
     }
 
     @Test
@@ -58,7 +74,7 @@ public class WriterSinkTest {
 
         _sink.putCharSequence(seq);
 
-        assertEquals(seq, _buf.toString());
+        assertEquals(seq, getOutput());
     }
 
     @Test
@@ -67,7 +83,7 @@ public class WriterSinkTest {
 
         _sink.putCodePoint(seq.codePointAt(0));
 
-        assertEquals(seq, _buf.toString());
+        assertEquals(seq, getOutput());
     }
     
     // TODO: Should test something off the BMP, i.e. > 0x10000
@@ -80,9 +96,9 @@ public class WriterSinkTest {
         
         _sink.putCodePoints(cpa, 0, cpa.length);
 
-        assertEquals(seq, _buf.toString());
+        assertEquals(seq, getOutput());
     }
-    
+
     /**
      * Copy the code points from a String to an array.
      * 

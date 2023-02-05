@@ -98,7 +98,7 @@ final class DefaultJsonPullParser implements JsonPullParser {
     }
 
     @Override
-    public BigDecimal getBigDecimal() throws IllegalStateException {
+    public Number getNumber() throws IllegalStateException {
         if (_numberValue == null) {
             throw new IllegalStateException(_currentEvent.toString());
         }
@@ -107,12 +107,12 @@ final class DefaultJsonPullParser implements JsonPullParser {
 
     @Override
     public double getDouble() throws IllegalStateException {
-        return getBigDecimal().doubleValue();
+        return getNumber().doubleValue();
     }
 
     @Override
     public int getInt() throws IllegalStateException {
-        return getBigDecimal().intValue();
+        return getNumber().intValue();
     }
 
     @Override

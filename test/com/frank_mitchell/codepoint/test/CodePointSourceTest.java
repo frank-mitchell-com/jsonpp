@@ -26,6 +26,7 @@ package com.frank_mitchell.codepoint.test;
 import java.io.*;
 import com.frank_mitchell.codepoint.CodePointSource;
 import com.frank_mitchell.codepoint.spi.CharSequenceSource;
+import java.util.PrimitiveIterator;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -54,6 +55,7 @@ public class CodePointSourceTest  {
      * 
      * @param store a backing store of characters used in the test.
      * @return a source that reads from the backing store
+     * @throws java.io.IOException if there's a fictional IOException
      */
     protected CodePointSource createCodePointSource(Object store) throws IOException {
         return new CharSequenceSource((CharSequence)store);
@@ -63,8 +65,9 @@ public class CodePointSourceTest  {
      * OVERRIDE this to add test text to the object under test.
      * 
      * @param text 
+     * @throws java.io.IOException if there's a fictional IOException
      */
-    protected void push(String text) {
+    protected void push(String text) throws IOException {
         ((StringBuilder)_store).append(text);
     }
     
@@ -82,23 +85,44 @@ public class CodePointSourceTest  {
 
     @Test
     public void testBasicRead() throws Exception {
-        String text = "bar";
         
-        push(text);
+        push("bar");
 
-        assertTrue("has next", _source.hasNext());
-        _source.next();
-        assertEquals("[0]", text.charAt(0), _source.getCodePoint());
+        assertStringRead("bar");
 
-        assertTrue("has next", _source.hasNext());
-        _source.next();
-        assertEquals("[1]", text.charAt(1), _source.getCodePoint());
+        assertEndOfStream();
+    }
+    
+    @Test
+    public void testSplitReads() throws Exception {        
+        push("foob");
 
-        assertTrue("has next", _source.hasNext());
-        _source.next();
-        assertEquals("[2]", text.charAt(2), _source.getCodePoint());
+        assertStringRead("foo");
 
-        assertFalse("has next", _source.hasNext());
+        push("ar");
+
+        assertStringRead("bar");
+
+        assertEndOfStream();
+    }
+    
+    protected void assertStringRead(String text) throws IOException {
+        PrimitiveIterator.OfInt iter = text.codePoints().iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            int cp = iter.nextInt();
+            assertTrue("has no next before <<" + text + ">> @" + index, 
+                    _source.hasNext());
+            _source.next();
+            assertEquals("char in <<" + text + ">> @" + index,
+                    cp, _source.getCodePoint());
+            index++;
+        }
+    }
+    
+    protected void assertEndOfStream() throws IOException {
+        assertFalse("has next at end of stream", _source.hasNext());
     }
     
     // TODO: Test reading non-ASCII chars

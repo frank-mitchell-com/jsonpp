@@ -21,33 +21,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.codepoint.spi;
-
-import java.io.IOException;
-import java.nio.IntBuffer;
-
-/**
- * Wraps an IntStream with Unicode code points.
- * 
- * @author Frank Mitchell
- */
-public class IntBufferSink extends AbstractSink {
-    private final IntBuffer _buf;
-    
-    public IntBufferSink(IntBuffer b) {
-        _buf = b;
-    }
-    
-    @Override
-    public void putCodePoint(int cp) throws IOException {
-        _buf.put(cp);
-    }
-
-    @Override
-    public void flush() throws IOException {
-    }
-
-    @Override
-    public void close() {
-    }
-}
+package com.frank_mitchell.codepoint.test;

@@ -86,7 +86,7 @@ public class DefaultJsonPullParserTest {
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_NUMBER, _parser.getEvent());
         assertEquals("string", "321", _parser.getString());
-        assertEquals("number", new BigDecimal("321"), _parser.getBigDecimal());
+        assertEquals("number", new BigDecimal("321"), _parser.getNumber());
 
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_STRING, _parser.getEvent());
@@ -187,7 +187,7 @@ public class DefaultJsonPullParserTest {
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_NUMBER, _parser.getEvent());
         assertEquals("string", "213", _parser.getString());
-        assertEquals("number", new BigDecimal("213"), _parser.getBigDecimal());
+        assertEquals("number", new BigDecimal("213"), _parser.getNumber());
 
         _parser.next();
         assertEquals("event", JsonEvent.KEY_NAME, _parser.getEvent());
@@ -282,17 +282,17 @@ public class DefaultJsonPullParserTest {
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_NUMBER, _parser.getEvent());
         assertEquals("string", "6", _parser.getString());
-        assertEquals("number", BIG_DECIMAL_SIX, _parser.getBigDecimal());
+        assertEquals("number", BIG_DECIMAL_SIX, _parser.getNumber());
 
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_NUMBER, _parser.getEvent());
         assertEquals("string", "1", _parser.getString());
-        assertEquals("number", BigDecimal.ONE, _parser.getBigDecimal());
+        assertEquals("number", BigDecimal.ONE, _parser.getNumber());
 
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_NUMBER, _parser.getEvent());
         assertEquals("string", "6", _parser.getString());
-        assertEquals("number", BIG_DECIMAL_SIX, _parser.getBigDecimal());
+        assertEquals("number", BIG_DECIMAL_SIX, _parser.getNumber());
 
         _parser.next();
         assertEquals("event", JsonEvent.END_ARRAY, _parser.getEvent());
@@ -375,7 +375,7 @@ public class DefaultJsonPullParserTest {
         _parser.next();
         assertEquals("event", JsonEvent.VALUE_NUMBER, _parser.getEvent());
         assertEquals("string", number, _parser.getString());
-        assertEquals("number", decimal, _parser.getBigDecimal());
+        assertEquals("number", decimal, _parser.getNumber());
 
         _parser.next();
         assertEquals("event", JsonEvent.END_STREAM, _parser.getEvent());
