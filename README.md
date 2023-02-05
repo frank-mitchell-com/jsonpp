@@ -36,15 +36,26 @@ but JSONPP has a different design and different goals from JSONP.
 
 ## BUILDING JSONPP ###
 
+Note that this project depends on another project of mine, **codepoint**.
+It's a small library for adapting various input and output sources to
+a stream of Unicode codepoints.  Java 8 and Java 9 lacked such a thing,
+so I wrote one.  I haven't looked into Java 17 or Java 19 yet, so maybe
+I can simply use a standard API.
+
 The project includes project files for both Eclipse and NetBeans. Fire up your
-favorite IDE (if it's one of those two) and go to town. *Or* just run `ant`.
+favorite IDE (if it's one of those two) and go to town.  `ant -f nbbuild.xml'
+also works from the command line, although it doesn't do *everything*.
+
+*Or* just run `ant` ... once someone (I) get the independent build working.
 
 It's a bunch of `.java` files. It's not that hard.
 
 
 ## INSTALLING JSONPP ##
 
-Simply put jsonpp.jar (or jsonpp-*version*.jar) in your CLASSPATH somewhere.
+Simply put jsonpp.jar (or jsonpp-*version*.jar) 
+and codepoint.jar (or codepoint-*version*.jar)
+in your CLASSPATH somewhere.
 
 
 ## USING JSONPP ##

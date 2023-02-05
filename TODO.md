@@ -3,6 +3,8 @@
 * Create `build.xml` to run tests and create `jsonpp-${VERSION}.jar`.
   (Independent of Eclipse, NetBeans, etc.)
 
+  - unbreak current draft.
+  - include codepoint.jar
   - read version from VERSION.txt
 
 * Use maven instead?
