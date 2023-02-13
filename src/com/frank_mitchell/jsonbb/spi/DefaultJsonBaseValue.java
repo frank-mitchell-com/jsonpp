@@ -21,53 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp;
+package com.frank_mitchell.jsonbb.spi;
 
 import com.frank_mitchell.codepoint.CodePointSink;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
-import java.nio.charset.Charset;
 
 /**
- * Instances of this interface creates concrete implementations of
- * {@link JsonPushProducer}.
- * 
- * @author Frank Mitchell
+ *
+ * @author fmitchell
  */
-public interface JsonPushProducerFactory {
-    /**
-     * Create an emitter around a {@link Writer}.
-     * 
-     * @param writer  writer to stream JSON as UTF-16 characters.
-     * @return a new emitter
-     * @throws IOException if the writer throws an exception
-     */
-    JsonPushProducer createProducer(Writer writer) throws IOException;
+abstract class DefaultJsonBaseValue implements JsonValue {
     
-    /**
-     * 
-     * @param out
-     * @param enc
-     * @return a new emitter
-     * @throws IOException if the writer throws an exception
-     */
-    JsonPushProducer createProducer(OutputStream out, Charset enc) throws IOException;
-    
-    /**
-     * 
-     * @param out
-     * @return a new emitter
-     * @throws IOException if the writer throws an exception
-     */
-    JsonPushProducer createUtf8Producer(OutputStream out) throws IOException;
-    
-    /**
-     * 
-     * @param cps
-     * @return a new emitter
-     * @throws IOException if the writer throws an exception
-     */
-    JsonPushProducer createProducer(CodePointSink cps) throws IOException;
+    @Override
+    public void writeTo(Writer writer) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        writeTo(builder);
+        writer.append(builder);
+    }
+
+    @Override
+    public void writeTo(CodePointSink cps) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        writeTo(builder);
+        cps.append(builder);
+    }
     
 }

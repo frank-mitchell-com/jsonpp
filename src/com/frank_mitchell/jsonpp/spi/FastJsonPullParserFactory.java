@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Frank Mitchell
+ * Copyright 2023 Frank Mitchell
  *
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the "Software"), 
@@ -20,74 +20,26 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package com.frank_mitchell.jsonpp;
+package com.frank_mitchell.jsonpp.spi;
+
+import com.frank_mitchell.jsonpp.JsonPullParser;
+import com.frank_mitchell.jsonpp.JsonPullParserFactory;
+import com.frank_mitchell.codepoint.CodePointSource;
+
+import java.io.IOException;
 
 /**
- * Enumeration of all possible JsonPullParser events.
+ * A {@link JsonPullParserFactory} for the default implementation.
+ *
+ * Only this class is public because extending the others is at best
+ * useless and at worst a source of bugs.
+ *
+ * @author Frank Mitchell
  */
-public enum JsonEvent {
-    /**
-     * Invalid JSON syntax.
-     */
-    SYNTAX_ERROR,
+public final class FastJsonPullParserFactory extends AbstractJsonPullParserFactory {
 
-    /**
-     * Before first JSON element
-     */
-    START_STREAM,
-
-    /**
-     * Start of JSON array ('[')
-     */
-    START_ARRAY,
-
-    /**
-     * End of JSON array (']')
-     */
-    END_ARRAY,
-
-    /**
-     * Start of JSON object ('{')
-     */
-    START_OBJECT,
-
-    /**
-     * End of JSON object ('}')
-     */
-    END_OBJECT,
-
-    /**
-     * Key of JSON object member ('"' ... '"' ':')
-     */
-    KEY_NAME,
-
-    /**
-     * JSON null ('null')
-     */
-    VALUE_NULL,
-
-    /**
-     * JSON boolean true ('true')
-     */
-    VALUE_TRUE,
-
-    /**
-     * JSON boolean false ('false')
-     */
-    VALUE_FALSE,
-
-    /**
-     * JSON number
-     */
-    VALUE_NUMBER,
-
-    /**
-     * JSON string ('"'...'"')
-     */
-    VALUE_STRING,
-
-    /**
-     * After last JSON element
-     */
-    END_STREAM
-};
+    @Override
+    public JsonPullParser createParser(final CodePointSource source) throws IOException {
+        return new FastJsonPullParser(source);
+    }
+}

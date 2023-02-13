@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
  * 
  * @author fmitchell
  */
-public class MockSource implements CodePointSource {
+public class FakeSource implements CodePointSource {
     
     /*
     The parser likes to read one or two characters ahead, so we'll give
@@ -43,7 +43,7 @@ public class MockSource implements CodePointSource {
     boolean _nextCalled = false;
     int _pos = -1;
     
-    public MockSource(CharSequence s) {
+    public FakeSource(CharSequence s) {
         _input = s;
     }
 

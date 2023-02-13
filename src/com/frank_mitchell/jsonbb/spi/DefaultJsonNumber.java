@@ -21,37 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
-
-import com.frank_mitchell.codepoint.spi.WriterSink;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import com.frank_mitchell.jsonpp.JsonPushProducer;
-import com.frank_mitchell.jsonpp.JsonPushProducerFactory;
+package com.frank_mitchell.jsonbb.spi;
 
 /**
  *
  * @author fmitchell
  */
-public abstract class AbstractJsonPushProducerFactory implements JsonPushProducerFactory {
+class DefaultJsonNumber extends DefaultJsonBaseValue {
     
-    @Override
-    public JsonPushProducer createProducer(Writer writer) throws IOException {
-        return createProducer(new WriterSink(writer));
+    final Number _value;
+
+    DefaultJsonNumber(Number v) {
+        _value = v;
     }
 
     @Override
-    public JsonPushProducer createProducer(OutputStream out, Charset enc) throws IOException {
-        return createProducer(new WriterSink(new OutputStreamWriter(out, enc)));
-    }
-
-    @Override
-    public JsonPushProducer createUtf8Producer(OutputStream out) throws IOException {
-        return createProducer(out, StandardCharsets.UTF_8);
+    public void writeTo(StringBuilder builder) {
+        appendJsonNumber(builder, _value, "null");
     }
     
+    public static void appendJsonNumber(StringBuilder buf, Number n, String alt) {
+        // JSON spec:
+        //     number ::= whole frac? exp?
+        // where
+        //     whole ::= ( ("-")? ( 0 | [1-9][0-9]* ) )
+        //     frac  ::= ( '.' [0-9]* )
+        //     exp   ::= ( ( "e"|"E" ) ("+"|"-")? [0-9][0-9]* )
+        //
+        // Meanwhile we have this:
+        if (n == null) {
+            buf.append(alt);
+        } else if (Double.isInfinite(n.doubleValue()) 
+                || Double.isNaN(n.doubleValue())) {
+            // no provisions for +/-Inf or NaN in the spec, so
+            buf.append(alt);
+        } else {
+            buf.append(n.toString());
+        }
+    }
+
 }

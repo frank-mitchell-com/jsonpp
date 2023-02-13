@@ -36,28 +36,28 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DefaultJsonPullParserTest {
+public class JsonPullParserTest {
 
     private static final BigDecimal BIG_DECIMAL_SIX = new BigDecimal("6");
 
     private JsonPullParserFactory _factory;
     private JsonPullParser _parser;
-    private StringBuffer _buffer;
-    private MockSource _mockSource;
+    private StringBuilder _builder;
+    private FakeSource _source;
 
     @Before
     public void setUp() throws IOException {
         _factory = getJsonPullParserFactory();
-        _buffer = new StringBuffer("  ");
-        _mockSource = new MockSource(_buffer);
-        _parser = _factory.createParser(_mockSource);
+        _builder = new StringBuilder();
+        _source = new FakeSource(_builder);
+        _parser = _factory.createParser(_source);
     }
 
     @After
     public void tearDown() {
         _factory = null;
         _parser = null;
-        _mockSource = null;
+        _source = null;
     }
 
     /**
@@ -71,7 +71,7 @@ public class DefaultJsonPullParserTest {
     }
 
     public void push(CharSequence s) {
-        _buffer.append(s);
+        _builder.append(s);
     }
     
     @Test

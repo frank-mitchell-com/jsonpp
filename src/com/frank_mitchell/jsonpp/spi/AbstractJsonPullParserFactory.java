@@ -21,15 +21,15 @@
  */
 package com.frank_mitchell.jsonpp.spi;
 
-import com.frank_mitchell.codepoint.spi.ReaderSource;
+import com.frank_mitchell.codepoint.CodePoint;
+import com.frank_mitchell.codepoint.CodePointSource;
+import com.frank_mitchell.jsonpp.JsonPullParser;
+import com.frank_mitchell.jsonpp.JsonPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
-
-import com.frank_mitchell.codepoint.CodePointSource;
-import com.frank_mitchell.jsonpp.JsonPullParser;
-import com.frank_mitchell.jsonpp.JsonPullParserFactory;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Useful superclass for all factories.
@@ -40,27 +40,20 @@ public abstract class AbstractJsonPullParserFactory implements JsonPullParserFac
     
     @Override
     public JsonPullParser createParser(Reader reader) throws IOException {
-        final ReaderSource source = new ReaderSource(reader);
+        final CodePointSource source = CodePoint.getSource(reader, StandardCharsets.UTF_16);
         return createParser(source);
     }
 
     @Override
     public JsonPullParser createUtf8Parser(InputStream input) throws IOException {
-        return createParser(new ReaderSource(input));
+        final CodePointSource source = CodePoint.getSource(input, StandardCharsets.UTF_8);
+        return createParser(source);
     }
 
     @Override
     public JsonPullParser createParser(InputStream input, Charset enc) throws IOException {
-        return createParser(new ReaderSource(input, enc));
+        final CodePointSource source = CodePoint.getSource(input, enc);
+        return createParser(source);
     }
     
-    /**
-     * Create a parser from a {@link CodePointSource}.
-     * 
-     * @param source a source for Unicode code points.
-     * @return a new JsonPullParser
-     * @throws IOException 
-     */
-    @Override
-    public abstract JsonPullParser createParser(CodePointSource source) throws IOException;
 }

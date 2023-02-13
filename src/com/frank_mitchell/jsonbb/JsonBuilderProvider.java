@@ -21,47 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.test;
+package com.frank_mitchell.jsonbb;
 
-import com.frank_mitchell.jsonpp.JsonEvent;
-import com.frank_mitchell.jsonpp.JsonPushProducer;
-import com.frank_mitchell.jsonpp.JsonPushProducerFactory;
-import com.frank_mitchell.jsonpp.spi.DefaultJsonPushProducerFactory;
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
+import com.frank_mitchell.jsonbb.JsonArrayBuilder;
+import com.frank_mitchell.jsonbb.JsonObjectBuilder;
 
 /**
  *
  * @author fmitchell
  */
-public class DefaultJsonPushProducerTest {
-    
-    JsonPushProducerFactory _factory;
-    CharArrayWriter _writer;
-    JsonPushProducer _producer;
-    
-    @Before
-    public void setUp() throws Exception {
-        _factory = new DefaultJsonPushProducerFactory();
-        _writer = new CharArrayWriter();
-        _producer = _factory.createProducer(_writer);
-    }
-    
-    @After
-    public void tearDown() throws Exception {
-    }
+public interface JsonBuilderProvider {
 
-    @Test
-    public void testSimpleArray() throws IOException {
-        _producer.setEvent(JsonEvent.START_ARRAY);
-        _producer.push();
-        _producer.setEvent(JsonEvent.END_ARRAY);
-        _producer.push();
-        
-        assertEquals("[]", _writer.toString());
-    }    
+    JsonArrayBuilder getNewArray();
+
+    JsonObjectBuilder getNewObject();
+    
 }

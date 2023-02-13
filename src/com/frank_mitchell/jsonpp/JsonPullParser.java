@@ -55,9 +55,9 @@ public interface JsonPullParser extends Closeable {
      * Indicates if the enclosing value is a JSON Array.
      *
      * If this object is currently processing the contents of a JSON Array, this
-     * method will return <code>true</code>.
+     * method will return {@code true}.
      *
-     * @return <code>true</code> if the enclosing value is a JSON Array.
+     * @return {@code true} if the enclosing value is a JSON Array.
      *
      * @see #isInObject()
      */
@@ -67,14 +67,27 @@ public interface JsonPullParser extends Closeable {
      * Indicates if the enclosing value is a JSON Object.
      *
      * If this parser is currently processing the contents of a JSON Object,
-     * this method will return <code>true</code>. If neither this method nor
+     * this method will return {@code true}. If neither this method nor
      * {@link #isInArray()} are true, this parser is either at the start or end
      * of the document, the document contains only an atomic value, or the
      * parser encountered an error.
      *
-     * @return <code>true</code> if the enclosing value is a JSON Object.
+     * @return {@code true} if the enclosing value is a JSON Object.
      */
     public boolean isInObject();
+
+    /**
+     * Whether this implementation supports {@link #getCurrentKey}.
+     * While most should, some implementers may choose memory footprint
+     * and speed over convenience.
+     * Override this method for implementations that don't.
+     *
+     * @return whether {@link #getCurrentKey} throws an
+     * UnsupportedOperationException.
+     */
+    default public boolean isCurrentKeySupported() {
+        return true;
+    }
 
     /**
      * Gets the key associated with the current value.
@@ -96,9 +109,15 @@ public interface JsonPullParser extends Closeable {
      * {@link JsonEvent#START_OBJECT},
      * {@link JsonEvent#END_STREAM}, or {@link JsonEvent#SYNTAX_ERROR} or if
      * there is no immediately enclosing JSON object, this method returns
-     * <code>null</code>;
+     * {@code null};
      *
-     * @return the value of a String or Number or <code>null</code>
+     * While implementations support this method,
+     * some implementers may choose memory footprint and speed over
+     * convenience.  {@link #isCurrentKeySupported} indicates whether
+     * a specific instance does or not.
+     *
+     * @return the value of a String or Number or {@code null}
+     * @throws UnsupportedOperationException if method not supported.
      */
     public String getCurrentKey();
 
@@ -116,7 +135,7 @@ public interface JsonPullParser extends Closeable {
      *
      * Otherwise the method throws an exception
      *
-     * @return the value of a String or Number or <code>null</code>
+     * @return the value of a String or Number or {@code null}
      *
      * @throws IllegalStateException if the current event has no string value.
      */
@@ -136,7 +155,7 @@ public interface JsonPullParser extends Closeable {
     public Number getNumber() throws IllegalStateException;
 
     /**
-     * Gets the <code>double</code> value associated with the current event.
+     * Gets the {@code double} value associated with the current event.
      *
      * If {@link #getEvent()} is {@link JsonEvent#VALUE_NUMBER}, this method
      * returns an unspecified subclass of Number. Otherwise this method throws
@@ -156,7 +175,7 @@ public interface JsonPullParser extends Closeable {
     }
 
     /**
-     * Gets the <code>int</code> value associated with the current event.
+     * Gets the {@code int} value associated with the current event.
      *
      * If {@link #getEvent()} is {@link JsonEvent#VALUE_NUMBER}, this method
      * returns an unspecified subclass of Number. Otherwise this method throws
@@ -175,7 +194,7 @@ public interface JsonPullParser extends Closeable {
     }
 
     /**
-     * Gets the <code>long</code> value associated with the current event.
+     * Gets the {@code long} value associated with the current event.
      *
      * If {@link #getEvent()} is {@link JsonEvent#VALUE_NUMBER}, this method
      * returns an unspecified subclass of Number. Otherwise this method throws

@@ -21,22 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.frank_mitchell.jsonpp.spi;
-
-import com.frank_mitchell.codepoint.CodePointSink;
-import java.io.IOException;
-import com.frank_mitchell.jsonpp.JsonPushProducer;
+package com.frank_mitchell.jsonbb.spi;
 
 /**
  *
  * @author fmitchell
  */
-public class DefaultJsonPushProducerFactory extends AbstractJsonPushProducerFactory {
+class DefaultJsonLiteral extends DefaultJsonBaseValue {
+    
+    static final DefaultJsonLiteral FALSE = new DefaultJsonLiteral("false");
+    static final DefaultJsonLiteral NULL = new DefaultJsonLiteral("null");
+    static final DefaultJsonLiteral TRUE = new DefaultJsonLiteral("true");
+    final String _name;
 
-
-    @Override
-    public JsonPushProducer createProducer(CodePointSink cps) throws IOException {
-        return new DefaultJsonPushProducer(cps);
+    DefaultJsonLiteral(String name) {
+        _name = name;
     }
 
+    @Override
+    public void writeTo(StringBuilder builder) {
+        builder.append(_name);
+    }
+    
 }
