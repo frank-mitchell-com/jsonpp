@@ -1,25 +1,24 @@
 /*
  * Copyright 2019 Frank Mitchell
  *
- * Permission is hereby granted, free of charge, to any person obtaining a 
- * copy of this software and associated documentation files (the "Software"), 
- * to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
+ *
+ * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
 package com.frank_mitchell.jsonpp.spi;
 
 import java.io.IOException;
@@ -28,9 +27,9 @@ import com.frank_mitchell.codepoint.CodePointSource;
 
 final class DefaultJsonLexer implements JsonLexer {
 
-    private final StringBuilder _tokenBuf  = new StringBuilder();
+    private final StringBuilder _tokenBuf = new StringBuilder();
     private final CodePointSource _source;
-    
+
     private int _tokenType = TOKEN_ERROR;
     private boolean _pushback = false;
 
@@ -48,6 +47,18 @@ final class DefaultJsonLexer implements JsonLexer {
         return _tokenBuf;
     }
 
+    private boolean isCodePointParsed() {
+        return !_pushback;
+    }
+
+    private void setCodePointUnparsed() {
+        this._pushback = true;
+    }
+
+    private void setCodePointParsed() {
+        this._pushback = false;
+    }
+
     @Override
     public void next() throws IOException {
         _tokenType = TOKEN_ERROR;
@@ -57,12 +68,14 @@ final class DefaultJsonLexer implements JsonLexer {
             _tokenType = TOKEN_EOF;
             return;
         }
-        if (_pushback) {
-            _pushback = false;
-        } else {
+
+        if (isCodePointParsed()) {
             _source.next();
         }
+
         int c = _source.getCodePoint();
+
+        setCodePointParsed();
 
         while (c >= 0 && isJsonWhitespace(c)) {
             _source.next();
@@ -188,18 +201,19 @@ final class DefaultJsonLexer implements JsonLexer {
     }
 
     private int readLiteral(String expected, int type) throws IOException {
-        for (int i = 0; i < expected.length(); i++) {
-            int c = _source.getCodePoint();
-            if (c != expected.charAt(i)) {
-                return TOKEN_ERROR;
-            }
-            _tokenBuf.append((char) c);
-            _source.next();
-        }
-        if (isKeywordCharacter(_source.getCodePoint())) {
+        if (_source.getCodePoint() == expected.charAt(0)) {
+            _tokenBuf.append((char) _source.getCodePoint());
+        } else {
             return TOKEN_ERROR;
         }
-        _pushback = true;
+
+        for (int i = 1; i < expected.length(); i++) {
+            _source.next();
+            if (_source.getCodePoint() != expected.charAt(i)) {
+                return TOKEN_ERROR;
+            }
+            _tokenBuf.append((char) _source.getCodePoint());
+        }
         return type;
     }
 
@@ -274,7 +288,7 @@ final class DefaultJsonLexer implements JsonLexer {
                 c = _source.getCodePoint();
             }
         }
-        _pushback = true;
+        setCodePointUnparsed();
         return TOKEN_NUMBER;
     }
 
@@ -322,7 +336,7 @@ final class DefaultJsonLexer implements JsonLexer {
 
         _tokenBuf.append((char) c);
         _source.next();
-        
+
         c = _source.getCodePoint();
         _tokenBuf.append((char) c);
 
@@ -340,10 +354,10 @@ final class DefaultJsonLexer implements JsonLexer {
             }
             return true;
         }
-        
+
         return false;
     }
-    
+
     private boolean isJsonEscapeChar(int c) {
         switch (c) {
             case 'b':
@@ -360,6 +374,7 @@ final class DefaultJsonLexer implements JsonLexer {
                 return false;
         }
     }
+
     @Override
     public void close() throws IOException {
         _source.close();
