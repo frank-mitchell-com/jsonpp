@@ -71,3 +71,6 @@
 ## Documentation
 
 * add example code, including a general Maps and Lists builder.
+
+* refer to said example in README.md
+
