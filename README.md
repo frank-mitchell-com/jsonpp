@@ -23,7 +23,7 @@ but JSONPP has a different design and different goals from JSONP.
   `JsonPullParser` instance to other methods by itself. As long as no client 
   calls `next()`, it will preserve all state of the last event.
 
-* Internally JSONP deals directly with code points. JSONP, as far as I can tell,
+* Internally JSONPP deals directly with code points. JSONP, as far as I can tell,
   sticks with `char`s and surrogate pairs.
 
 * JSONPP flags errors with a `SYNTAX_ERROR` event instead of throwing exceptions.
@@ -57,55 +57,4 @@ interface like SAX parsers, the caller pulls new tokens or events from the input
 every call to `next()`. Thus one method can pass a `JsonPullParser` instance to
 another method.
 
-For example, let's say a caller wants to create a `PurchaseOrder` instance containing
-one or more `PurchaseOrderItem` instances.  A developer can do something like this:
-
-        JsonEvent event;
-        java.beans.PropertyDescriptor prop;
-        PurchaseOrder order = new PurchaseOrder();
-
-        parser.next();
-
-        if (parser.getEvent() != OBJECT_START) {
-           throw new IOException("invalid input");
-        }
-
-        parser.next();
-        event = parser.getEvent();
-
-        while (!(event == END_STREAM || event == SYNTAX_ERROR)) {
-
-            switch (event) {
-            case KEY_NAME:
-                prop = lookupPurchaseOrderPropertyForKey(parser.getCurrentKey());
-                break;
-            case VALUE_TRUE:
-                prop.invoke(order, Boolean.TRUE);
-            case VALUE_FALSE:
-                prop.invoke(order, Boolean.FALSE);
-            case VALUE_NULL:
-                prop.invoke(order, null);
-            case VALUE_STRING:
-                prop.invoke(order, parser.getString());
-            case VALUE_NUMBER:
-                prop.invoke(order, parser.getNumber());
-                break;
-            case ARRAY_START:
-                readOrderItemArray(parser); // calls readOrderItem(parser) in loop
-                assert (getEvent() == ARRAY_END);
-                break;
-            case OBJECT_END:
-                checkOrder(order); // checks all necessary properties set.
-                break;
-            default:
-                throw new IOException("invalid input");
-            }
-
-            parser.next();
-            event = parser.getEvent();
-        }
-
-Obviously this code needs more error checking and better error reporting.
-It's also not too different from what one may write using JSONP's `JsonParser`.
-
-
+(TODO: Sensible code example.)
