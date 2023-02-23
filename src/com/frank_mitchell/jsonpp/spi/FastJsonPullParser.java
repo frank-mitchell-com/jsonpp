@@ -340,6 +340,8 @@ public final class FastJsonPullParser implements JsonPullParser {
                 case VALUE_FALSE:
                 case VALUE_NULL:
                     return true;
+                default:
+                    return false;
             }
         }
         return false;

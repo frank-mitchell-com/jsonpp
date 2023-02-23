@@ -23,9 +23,6 @@
  */
 package com.frank_mitchell.jsonbb;
 
-import com.frank_mitchell.jsonbb.JsonArrayBuilder;
-import com.frank_mitchell.jsonbb.JsonObjectBuilder;
-
 /**
  *
  * @author fmitchell

@@ -50,10 +50,18 @@ public class JsonBaseBuilderTest {
     }
 
     @Test
-    public void testSimpleArray() throws IOException {
+    public void testEmptyArray() throws IOException {
         JsonArrayBuilder builder = JsonBuilderFactory.getNewArray();
         
         builder.writeTo(_writer);
         assertEquals("[]", _writer.toString());
+    }    
+
+    @Test
+    public void testEmptyObject() throws IOException {
+        JsonObjectBuilder builder = JsonBuilderFactory.getNewObject();
+        
+        builder.writeTo(_writer);
+        assertEquals("{}", _writer.toString());
     }    
 }
