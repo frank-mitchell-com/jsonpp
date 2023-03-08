@@ -217,10 +217,6 @@ final class DefaultJsonLexer implements JsonLexer {
         return type;
     }
 
-    private static boolean isKeywordCharacter(final int c) {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-    }
-
     private int readNumber() throws IOException {
         int c = _source.getCodePoint();
 

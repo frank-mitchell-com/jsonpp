@@ -210,21 +210,21 @@ public final class FastJsonPullParser implements JsonPullParser {
         }
         switch (c) {
             case '{':
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     _event = JsonEvent.START_OBJECT;
                     pushValue(_event);
                 }
                 break;
             case '}':
                 // TODO: Check if in appropriate state
-                if (expectEndOfObject()) {
+                if (isExpectingEndOfObject()) {
                     _event = JsonEvent.END_OBJECT;
                     popValue();
                 }
                 break;
             case '[':
                 // TODO: Check if in appropriate state
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     _event = JsonEvent.START_ARRAY;
                     pushValue(_event);
                 } else {
@@ -232,23 +232,23 @@ public final class FastJsonPullParser implements JsonPullParser {
                 }
                 break;
             case ']':
-                if (expectValue() && isInArray()) {
+                if (isExpectingEndOfArray()) {
                     _event = JsonEvent.END_ARRAY;
                     popValue();
                 }
                 break;
             case 'f':
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     readLiteral("false", JsonEvent.VALUE_FALSE); // sets _event
                 }
                 break;
             case 't':
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     readLiteral("true", JsonEvent.VALUE_TRUE); // sets _event
                 }
                 break;
             case 'n':
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     readLiteral("null", JsonEvent.VALUE_NULL); // sets _event
                 }
                 break;
@@ -262,7 +262,7 @@ public final class FastJsonPullParser implements JsonPullParser {
             case '7':
             case '8':
             case '9':
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     readNumber();
                 }
                 if (_numberValue != null) {
@@ -271,13 +271,13 @@ public final class FastJsonPullParser implements JsonPullParser {
                 break;
             case '\"':
                 // TODO: Check if in appropriate state
-                if (expectValue()) {
+                if (isExpectingValue()) {
                     readString();
-                } else if (expectKey()) {
+                } else if (isExpectingKey()) {
                     readKey();
                 }
                 if (_stringValue != null) {
-                    if (expectKey()) {
+                    if (isExpectingKey()) {
                         _event = JsonEvent.KEY_NAME;
                     } else {
                         _event = JsonEvent.VALUE_STRING;
@@ -285,7 +285,7 @@ public final class FastJsonPullParser implements JsonPullParser {
                 }
                 break;
             default:
-                if (c < 0 && expectEndOfStream()) {
+                if (c < 0 && isExpectingEndOfStream()) {
                     _event = JsonEvent.END_STREAM;
                 }
                 break;
@@ -329,7 +329,7 @@ public final class FastJsonPullParser implements JsonPullParser {
         _depth--;
     }
 
-    private boolean expectKey() {
+    private boolean isExpectingKey() {
         if (isInObject()) {
             switch (lastEvent()) {
                 case END_OBJECT:
@@ -347,21 +347,21 @@ public final class FastJsonPullParser implements JsonPullParser {
         return false;
     }
 
-    private boolean expectValue() {
+    private boolean isExpectingValue() {
         return lastEvent() == JsonEvent.START_STREAM
                 || isInArray()
                 || (isInObject() && lastEvent() == JsonEvent.KEY_NAME);
     }
 
-    private boolean expectEndOfObject() {
+    private boolean isExpectingEndOfObject() {
         return isInObject();
     }
 
-    private boolean expectEndOfArray() {
+    private boolean isExpectingEndOfArray() {
         return isInArray();
     }
 
-    private boolean expectEndOfStream() {
+    private boolean isExpectingEndOfStream() {
         return depth() == 0;
     }
 
