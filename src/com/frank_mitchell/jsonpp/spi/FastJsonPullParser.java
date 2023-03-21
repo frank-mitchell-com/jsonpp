@@ -24,13 +24,11 @@
 package com.frank_mitchell.jsonpp.spi;
 
 import com.frank_mitchell.codepoint.CodePointSource;
-import com.frank_mitchell.codepoint.spi.ReaderSource;
 import com.frank_mitchell.jsonpp.JsonEvent;
 import com.frank_mitchell.jsonpp.JsonPullParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.BitSet;
 
 /**
@@ -56,9 +54,6 @@ public final class FastJsonPullParser implements JsonPullParser {
     private final BitSet _objectsByDepth = new BitSet();
     private int _depth = 0;
 
-    private boolean _streamAsArray = false;
-    private boolean _allowAllDoubles = false;
-
     /**
      * Indicates the parser performed look-ahead. The parser therefore should
      * not advance its Source, but reread the Source's current character.
@@ -82,55 +77,17 @@ public final class FastJsonPullParser implements JsonPullParser {
     }
 
     /**
-     * A constructor around a stream of UTF-8 bytes.While the JSON spec uses
+     * A constructor around a stream of ASCII bytes. While the JSON spec uses
      * only ASCII characters, the Default implementation allows Unicode inside
-     * string constants. While this one does also, any embedded non-ASCII
-     * characters will slow down processing.
+     * string constants. Using this constructor asserts the stream contains
+     * NO characters with more than 7 bits.
      *
-     * @param in an input stream of (mostly) ASCII
+     * @param in an input stream of all ASCII
      * @throws java.io.IOException
      */
     public FastJsonPullParser(InputStream in) throws IOException {
         // this(new Utf8Source(in));
-        this(new ReaderSource(in, StandardCharsets.UTF_8));
-    }
-
-    /* -------------------- PARSER OPTIONS ----------------------- */
-
-    /**
-     * Whether to parse NaN and +/-Infinity as JSON Numbers.
-     * The spec says no, but some implementations allow it as an option.
-     * 
-     * @return true if 'NaN' and 'Infinity" values are allowed.
-     */
-    public boolean isAllowAllDoubles() {
-        return _allowAllDoubles;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setAllowAllDoubles(boolean value) {
-        _allowAllDoubles = value;
-    }
-
-    /**
-     * Whether to treat the stream as an Array. If true the parser will allow
-     * the stream to contain multiple values, not just one as per the
-     * specification. May be useful to handle continuous streams of messages,
-     * e.g. JSON-RPC.
-     *
-     * @return true if parsing multiple values on same stream.
-     */
-    public boolean isStreamAsArray() {
-        return _streamAsArray;
-    }
-
-    /**
-     * @param value the value to set
-     */
-    public void setStreamAsArray(boolean value) {
-        _streamAsArray = value;
+        this(new FastAsciiSource(in));
     }
 
     /*  ------------------- PARSER METHODS ----------------------- */

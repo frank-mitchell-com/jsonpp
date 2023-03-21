@@ -40,20 +40,22 @@ public abstract class AbstractJsonPullParserFactory implements JsonPullParserFac
     
     @Override
     public JsonPullParser createParser(Reader reader) throws IOException {
-        final CodePointSource source = CodePoint.getSource(reader, StandardCharsets.UTF_16);
+        final CodePointSource source = 
+                CodePoint.getSource(reader, StandardCharsets.UTF_16);
         return createParser(source);
     }
 
     @Override
     public JsonPullParser createUtf8Parser(InputStream input) throws IOException {
-        final CodePointSource source = CodePoint.getSource(input, StandardCharsets.UTF_8);
+        final CodePointSource source = 
+                CodePoint.getSource(input, StandardCharsets.UTF_8);
         return createParser(source);
     }
 
     @Override
     public JsonPullParser createParser(InputStream input, Charset enc) throws IOException {
-        final CodePointSource source = CodePoint.getSource(input, enc);
+        final CodePointSource source = 
+                CodePoint.getSource(input, enc);
         return createParser(source);
     }
-    
 }

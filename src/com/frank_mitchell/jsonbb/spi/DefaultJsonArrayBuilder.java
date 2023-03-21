@@ -24,10 +24,10 @@
 package com.frank_mitchell.jsonbb.spi;
 
 import com.frank_mitchell.jsonbb.JsonArrayBuilder;
+import com.frank_mitchell.jsonbb.JsonBuilder;
 import com.frank_mitchell.jsonbb.JsonObjectBuilder;
 import java.util.ArrayList;
 import java.util.List;
-import com.frank_mitchell.jsonbb.JsonBuilderCommon;
 
 /**
  *
@@ -36,13 +36,13 @@ import com.frank_mitchell.jsonbb.JsonBuilderCommon;
 public class DefaultJsonArrayBuilder extends DefaultJsonBaseValue implements JsonArrayBuilder {
     
     private final List<JsonValue> _values = new ArrayList<>();
-    private final JsonBuilderCommon _parent;
+    private final JsonBuilder _parent;
 
     DefaultJsonArrayBuilder() {
         _parent = null;
     }
 
-    DefaultJsonArrayBuilder(JsonBuilderCommon p) {
+    DefaultJsonArrayBuilder(JsonBuilder p) {
         _parent = p;
     }
 
@@ -97,7 +97,7 @@ public class DefaultJsonArrayBuilder extends DefaultJsonBaseValue implements Jso
     }
 
     @Override
-    public JsonBuilderCommon getParent() {
+    public JsonBuilder getParent() {
         return _parent;
     }
 

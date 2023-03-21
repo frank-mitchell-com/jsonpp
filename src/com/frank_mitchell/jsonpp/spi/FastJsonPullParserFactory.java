@@ -29,7 +29,7 @@ import com.frank_mitchell.codepoint.CodePointSource;
 import java.io.IOException;
 
 /**
- * A {@link JsonPullParserFactory} for the default implementation.
+ * A {@link JsonPullParserFactory} for a "fast" implementation.
  *
  * Only this class is public because extending the others is at best
  * useless and at worst a source of bugs.

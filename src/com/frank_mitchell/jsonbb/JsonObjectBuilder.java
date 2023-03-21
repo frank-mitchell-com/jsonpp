@@ -27,7 +27,7 @@ package com.frank_mitchell.jsonbb;
  *
  * @author fmitchell
  */
-public interface JsonObjectBuilder extends JsonBuilderCommon {
+public interface JsonObjectBuilder extends JsonBuilder {
     @Override
     default boolean isArray() {
         return false;

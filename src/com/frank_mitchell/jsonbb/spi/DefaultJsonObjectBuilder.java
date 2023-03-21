@@ -24,12 +24,12 @@
 package com.frank_mitchell.jsonbb.spi;
 
 import com.frank_mitchell.jsonbb.JsonArrayBuilder;
+import com.frank_mitchell.jsonbb.JsonBuilder;
 import com.frank_mitchell.jsonbb.JsonObjectBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.frank_mitchell.jsonbb.JsonBuilderCommon;
 
 /**
  *
@@ -39,9 +39,9 @@ public class DefaultJsonObjectBuilder extends DefaultJsonBaseValue implements Js
     
     private final List<String> _keys = new ArrayList<>();
     private final Map<String, JsonValue> _values = new HashMap<>();
-    private final JsonBuilderCommon _parent;
+    private final JsonBuilder _parent;
 
-    DefaultJsonObjectBuilder(JsonBuilderCommon p) {
+    DefaultJsonObjectBuilder(JsonBuilder p) {
         _parent = p;
     }
 
@@ -107,7 +107,7 @@ public class DefaultJsonObjectBuilder extends DefaultJsonBaseValue implements Js
     }
 
     @Override
-    public JsonBuilderCommon getParent() {
+    public JsonBuilder getParent() {
         return _parent;
     }
 

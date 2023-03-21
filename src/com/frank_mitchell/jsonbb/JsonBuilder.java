@@ -31,12 +31,12 @@ import java.io.Writer;
  *
  * @author fmitchell
  */
-public interface JsonBuilderCommon {
+public interface JsonBuilder {
     boolean isArray();
     
     boolean isObject();
     
-    JsonBuilderCommon getParent();
+    JsonBuilder getParent();
     
     void writeTo(StringBuilder builder);
     
