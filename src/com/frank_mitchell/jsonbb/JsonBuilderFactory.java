@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 fmitchell.
+ * Copyright 2023 Frank Mitchell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,10 @@ package com.frank_mitchell.jsonbb;
 import com.frank_mitchell.jsonbb.spi.DefaultJsonProvider;
 
 /**
+ * Facade for a {@link JsonBuilderProvider} that can create
+ * {@link JsonArrayBuilder}s and {@link JsonObjectBuilder}s.
  *
- * @author fmitchell
+ * @author Frank Mitchell
  */
 public class JsonBuilderFactory {
     
@@ -37,10 +39,20 @@ public class JsonBuilderFactory {
     private JsonBuilderFactory() {
     }
     
+    /**
+     * Create a builder for a syntactically correct JSON Array.
+     *
+     * @return the builder
+     */
     public static JsonArrayBuilder getNewArray() {
         return PROVIDER.getNewArray();
     }
     
+    /**
+     * Create a builder for a syntactically correct JSON Object.
+     *
+     * @return the builder
+     */
     public static JsonObjectBuilder getNewObject() {
         return PROVIDER.getNewObject();
     }

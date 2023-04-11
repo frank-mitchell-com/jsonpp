@@ -27,6 +27,9 @@ import com.frank_mitchell.jsonpp.JsonPullParserFactory;
 import com.frank_mitchell.codepoint.CodePointSource;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A {@link JsonPullParserFactory} for a "fast" implementation.
@@ -37,6 +40,20 @@ import java.io.IOException;
  * @author Frank Mitchell
  */
 public final class FastJsonPullParserFactory extends AbstractJsonPullParserFactory {
+
+    /**
+     * Default constructor.
+     */
+    public FastJsonPullParserFactory() {
+    }
+
+    @Override
+    public JsonPullParser createParser(final InputStream in, Charset cs) throws IOException {
+        if (cs.equals(StandardCharsets.US_ASCII)) {
+            return new FastJsonPullParser(in);
+        }
+        return super.createParser(in, cs);
+    }
 
     @Override
     public JsonPullParser createParser(final CodePointSource source) throws IOException {

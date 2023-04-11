@@ -29,11 +29,7 @@ import com.frank_mitchell.jsonbb.JsonObjectBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author fmitchell
- */
-public class DefaultJsonArrayBuilder extends DefaultJsonBaseValue implements JsonArrayBuilder {
+class DefaultJsonArrayBuilder extends DefaultJsonBaseValue implements JsonArrayBuilder {
     
     private final List<JsonValue> _values = new ArrayList<>();
     private final JsonBuilder _parent;

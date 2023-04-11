@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 fmitchell.
+ * Copyright 2023 Frank Mitchell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,19 +28,52 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Common methods for objects to build syntactically correct JSON values.
  *
- * @author fmitchell
+ * @author Frank Mitchell
  */
 public interface JsonBuilder {
+    /**
+     * Whether this object is a JSON Array.
+     *
+     * @return whether this object is a JSON Array
+     */
     boolean isArray();
     
+    /**
+     * Whether this object is a JSON Object.
+     *
+     * @return whether this object is a JSON Object
+     */
     boolean isObject();
     
+    /**
+     * The Builder that contains this instance.
+     *
+     * @return the parent of this instance.
+     */
     JsonBuilder getParent();
     
+    /**
+     * Write this object's current value to a string.
+     *
+     * @param builder the StringBuilder to be written to.
+     */
     void writeTo(StringBuilder builder);
     
+    /**
+     * Write this object's current value to a Writer.
+     *
+     * @param writer the Writer to be written to.
+     * @throws IOException if the writer throws an exception
+     */
     void writeTo(Writer writer) throws IOException;
-    
+
+    /**
+     * Write this object's current value to a CodePointSink.
+     *
+     * @param sink the CodePointSink to be written to.
+     * @throws IOException if the sink throws an exception
+     */
     void writeTo(CodePointSink sink) throws IOException;
 }

@@ -28,10 +28,17 @@ import com.frank_mitchell.jsonbb.JsonObjectBuilder;
 import com.frank_mitchell.jsonbb.JsonBuilderProvider;
 
 /**
+ * Default implementation of a Builder provider.
  *
- * @author fmitchell
+ * @author Frank Mitchell
  */
 public class DefaultJsonProvider implements JsonBuilderProvider {
+    /**
+     * Default and only constructor.
+     */
+    public DefaultJsonProvider() {
+    }
+
     @Override
     public JsonArrayBuilder getNewArray() {
         return new DefaultJsonArrayBuilder();

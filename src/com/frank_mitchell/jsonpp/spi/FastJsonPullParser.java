@@ -42,7 +42,7 @@ import java.util.BitSet;
  *
  * @author Frank Mitchell
  */
-public final class FastJsonPullParser implements JsonPullParser {
+final class FastJsonPullParser implements JsonPullParser {
 
     private final CodePointSource _source;
 
@@ -68,7 +68,7 @@ public final class FastJsonPullParser implements JsonPullParser {
      *
      * @param src a source of Unicode code points
      */
-    public FastJsonPullParser(CodePointSource src) {
+    FastJsonPullParser(CodePointSource src) {
         _source = src;
         _event = JsonEvent.START_STREAM;
         _lastEvent = _event;
@@ -83,10 +83,9 @@ public final class FastJsonPullParser implements JsonPullParser {
      * NO characters with more than 7 bits.
      *
      * @param in an input stream of all ASCII
-     * @throws java.io.IOException
+     * @throws IOException if the input stream throws an exception
      */
-    public FastJsonPullParser(InputStream in) throws IOException {
-        // this(new Utf8Source(in));
+    FastJsonPullParser(InputStream in) throws IOException {
         this(new FastAsciiSource(in));
     }
 

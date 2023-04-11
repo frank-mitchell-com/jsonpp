@@ -43,10 +43,10 @@ so I wrote one.  I haven't looked into Java 17 or Java 19 yet, so maybe
 I can simply use a standard API.
 
 The project includes project files for both Eclipse and NetBeans. Fire up your
-favorite IDE (if it's one of those two) and go to town.  `ant -f nbbuild.xml'
-also works from the command line, although it doesn't do *everything*.
+favorite IDE (if it's one of those two) and go to town.
 
-*Or* just run `ant` ... once someone (I) get the independent build working.
+*Or* just run `ant`. *Most* things should work, although I still need to
+tweak some things.
 
 It's a bunch of `.java` files. It's not that hard.
 

@@ -20,4 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * Public interface classes for the JSON Pull Parser.
+ */
 package com.frank_mitchell.jsonpp;

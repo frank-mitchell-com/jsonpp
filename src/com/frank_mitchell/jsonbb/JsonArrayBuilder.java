@@ -24,8 +24,9 @@
 package com.frank_mitchell.jsonbb;
 
 /**
+ * Builds a syntactically correct JSON Array.
  *
- * @author fmitchell
+ * @author Frank Mitchell
  */
 public interface JsonArrayBuilder extends JsonBuilder {
     @Override
@@ -39,57 +40,65 @@ public interface JsonArrayBuilder extends JsonBuilder {
     }
 
     /**
-     * 
-     * @param value
-     * @return 
+     * Add a JSON String to the end of this Array.
+     *
+     * @param value the value of the String
+     * @return this
      */
     JsonArrayBuilder addString(String value);
     
     /**
-     * 
-     * @param value
-     * @return 
+     * Add a JSON Number to the end of this Array.
+     *
+     * @param value the value of the Number
+     * @return this
      */
     JsonArrayBuilder addNumber(Number value);
     
     /**
-     * 
-     * @param value
-     * @return 
+     * Add a JSON Boolean to the end of this Array.
+     *
+     * @param value the boolean value
+     * @return this
      */
     JsonArrayBuilder addBoolean(boolean value);
     
     /**
+     * Add a JSON Boolean {@code true} to the end of this Array.
      * 
-     * @return 
+     * @return this
      */
     default JsonArrayBuilder addTrue() {
         return addBoolean(true);
     }
     
     /**
+     * Add a JSON Boolean {@code false} to the end of this Array.
      * 
-     * @return 
+     * @return this
      */
     default JsonArrayBuilder addFalse() {
         return addBoolean(false);
     }
     
     /**
+     * Add a JSON Null to the end of this Array.
      * 
-     * @return 
+     * @return this
      */
     JsonArrayBuilder addNull();
     
     /**
+     * Add a new JSON Object to the end of this Array.
      * 
-     * @return 
+     * @return the builder for the JSON Object.
      */
     JsonObjectBuilder addNewObject();
     
     /**
+     * Add a new JSON Array to the end of this Array.
      * 
-     * @return 
+     * @return the builder for the JSON Array.
      */
     JsonArrayBuilder addNewArray();
 }

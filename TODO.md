@@ -3,9 +3,9 @@
 * Create `build.xml` to run tests and create `jsonpp-${VERSION}.jar`.
   (Independent of Eclipse, NetBeans, etc.)
 
-  - unbreak current draft.
-  - include codepoint.jar
+  - write test results to ${test.report.dir}.
   - read version from VERSION.txt
+  - pull in latest codepoint.jar?
 
 * Use maven instead?
 
@@ -16,13 +16,10 @@
   E.g. in JSON-RPC one part of the code handles the envelope, another
   processes the procedure and arguments.
 
-* Add AbstractJson...Factory to the public API?
+* Add AbstractJson...Factory to `**.jsonpp` (no `spi`)?
 
 
 ## Internals
-
-* Rewrite the current Lexer to *NOT* call `getCodePoint()` until after it calls
-  `next()`, so we don't have to load up a first character at the start.
 
 * Make tracking the current key a/or index optional, to save time and space.
 
@@ -30,11 +27,14 @@
 
 * Define configurable properties on `JsonParserFactory`.
 
-* Option to throw exceptions instead of SYNTAX_ERROR.
+* Option to throw exceptions instead of `SYNTAX_ERROR`.
 
 * Option for "streaming mode" containing multiple JSON objects, 
   e.g. [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding)
   or streaming asynchronous events through a HTTP Response that never ends.
+
+* Profile existing implementation(s) (with what?) to minimize object creation
+  and other performance bottlenecks.
 
 
 ## Tests

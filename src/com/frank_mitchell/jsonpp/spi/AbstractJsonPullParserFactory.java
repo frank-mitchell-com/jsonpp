@@ -37,7 +37,12 @@ import java.nio.charset.StandardCharsets;
  * @author Frank Mitchell
  */
 public abstract class AbstractJsonPullParserFactory implements JsonPullParserFactory {
-    
+    /**
+     * Default constructor.
+     */
+    protected AbstractJsonPullParserFactory() {
+    }
+
     @Override
     public JsonPullParser createParser(Reader reader) throws IOException {
         final CodePointSource source = 

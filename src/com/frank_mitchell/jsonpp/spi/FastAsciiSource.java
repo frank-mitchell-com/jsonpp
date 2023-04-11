@@ -45,7 +45,7 @@ public class FastAsciiSource implements CodePointSource {
      *
      * @param in the Input Stream.
      */
-    @ForCharsets(names={"ASCII"})
+    @ForCharsets(names={"US-ASCII"})
     public FastAsciiSource(InputStream in) {
         Objects.requireNonNull(in, "No InputStream");
         _input = new BufferedInputStream(in, 1024);

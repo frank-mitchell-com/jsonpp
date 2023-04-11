@@ -202,7 +202,7 @@ public interface JsonPullParser extends Closeable {
      *
      * @return the value of the current JSON Number
      *
-     * @throws IllegalStateException
+     * @throws IllegalStateException if the current event is not a number.
      */
     default public long getLong() throws IllegalStateException {
         Number n = getNumber();

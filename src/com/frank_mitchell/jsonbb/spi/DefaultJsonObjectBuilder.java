@@ -31,11 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author fmitchell
- */
-public class DefaultJsonObjectBuilder extends DefaultJsonBaseValue implements JsonObjectBuilder {
+class DefaultJsonObjectBuilder extends DefaultJsonBaseValue implements JsonObjectBuilder {
     
     private final List<String> _keys = new ArrayList<>();
     private final Map<String, JsonValue> _values = new HashMap<>();

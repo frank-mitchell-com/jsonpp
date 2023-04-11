@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 fmitchell.
+ * Copyright 2023 Frank Mitchell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,9 @@
 package com.frank_mitchell.jsonbb;
 
 /**
+ * Builds syntactically correct JSON Objects.
  *
- * @author fmitchell
+ * @author Frank Mitchell
  */
 public interface JsonObjectBuilder extends JsonBuilder {
     @Override
@@ -39,35 +40,71 @@ public interface JsonObjectBuilder extends JsonBuilder {
     }
     
     /**
-     * 
-     * @param key
-     * @param value
-     * @return 
+     * Set a JSON String for the named element in the JSON Object.
+     *
+     * @param key    name of the element
+     * @param value  value of the element
+     * @return this instance
      */
     JsonObjectBuilder setString(String key, String value);
     
     /**
-     * 
-     * @param key
-     * @param value
-     * @return 
+     * Set a JSON Number for the named element in the JSON Object.
+     *
+     * @param key    name of the element
+     * @param value  value of the element
+     * @return this instance
      */
     JsonObjectBuilder setNumber(String key, Number value);
     
     /**
-     * 
-     * @param key
-     * @param value
-     * @return 
+     * Set a JSON Boolean for the named element in the JSON Object.
+     *
+     * @param key    name of the element
+     * @param value  value of the element
+     * @return this instance
      */
     default JsonObjectBuilder setBoolean(String key, boolean value) {
         return value ? setTrue(key) : setFalse(key);
     }
     
+    /**
+     * Set a JSON Boolean {@code false} for the named element in the JSON Object.
+     *
+     * @param key    name of the element
+     * @return this instance
+     */
     JsonObjectBuilder setTrue(String key);
+
+    /**
+     * Set a JSON Boolean {@code false} for the named element in the JSON Object.
+     *
+     * @param key    name of the element
+     * @return this instance
+     */
     JsonObjectBuilder setFalse(String key);
+
+    /**
+     * Set a JSON Null for the named element in the JSON Object.
+     *
+     * @param key    name of the element
+     * @return this instance
+     */
     JsonObjectBuilder setNull(String key);
     
+    /**
+     * Set a new JSON Object for the named element in this Object.
+     *
+     * @param key    name of the element
+     * @return the builder for the new Object
+     */
     JsonObjectBuilder setNewObject(String key);
+
+    /**
+     * Set a new JSON Array for the named element in this JSON Object.
+     *
+     * @param key    name of the element
+     * @return the builder for the new Array
+     */
     JsonArrayBuilder setNewArray(String key);
 }

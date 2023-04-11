@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2023 fmitchell.
+ * Copyright 2023 Frank Mitchell.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,24 @@
 package com.frank_mitchell.jsonbb;
 
 /**
+ * Factory for {@link JsonArrayBuilder}s and {@link JsonObjectBuilder}s.
  *
- * @author fmitchell
+ * @author Frank Mitchell
  */
 public interface JsonBuilderProvider {
 
+    /**
+     * Create a new instance capable of constructing a JSON Array.
+     *
+     * @return new builder
+     */
     JsonArrayBuilder getNewArray();
 
+    /**
+     * Create a new instance capable of constructing a JSON Object.
+     *
+     * @return new builder
+     */
     JsonObjectBuilder getNewObject();
     
 }

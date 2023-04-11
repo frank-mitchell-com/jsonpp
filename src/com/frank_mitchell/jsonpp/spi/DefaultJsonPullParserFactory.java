@@ -38,6 +38,12 @@ import java.io.IOException;
  */
 public final class DefaultJsonPullParserFactory extends AbstractJsonPullParserFactory {
 
+    /**
+     * Default constructor.
+     */
+    public DefaultJsonPullParserFactory() {
+    }
+
     @Override
     public JsonPullParser createParser(final CodePointSource source) throws IOException {
         return new DefaultJsonPullParser(source);

@@ -20,4 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * Implementation classes for the JSON Pull Parser.
+ */
 package com.frank_mitchell.jsonpp.spi;
