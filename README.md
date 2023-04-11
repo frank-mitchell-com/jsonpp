@@ -4,9 +4,9 @@
 
 *But we already have [JSONP](https://projects.eclipse.org/projects/ee4j.jsonp)!*
 
-At the time I started this, I didn't know about JSONPP. Even if I had, though
-I'd still have written it. Partly it's an exercise to waken my rusty coding skills,
-but JSONPP has a different design and different goals from JSONP.
+At the time I started this, I didn't know about JSONP. Even if I had, though
+I'd still have written it. Partly it's an exercise to waken my rusty coding 
+skills, but JSONPP has a different design and different goals from JSONP.
 
 
 *So what are the differences?*

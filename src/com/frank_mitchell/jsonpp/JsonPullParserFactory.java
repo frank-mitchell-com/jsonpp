@@ -26,14 +26,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.Map;
 
 /**
  * Creates JsonPullParser instances without clients knowing the specific
  * class(es) used.
  *
- * {@link #setConfiguration(Map)} provides a hook to configure a factory without
- * knowing or caring what specific instance performs the work.
+ * @author Frank Mitchell
  */
 public interface JsonPullParserFactory {
 
