@@ -3,7 +3,11 @@
 
     <property name="src" location="src" />
     <property name="test" location="test" />
-    <property name="lib.codepoint" location="lib/codepoint.jar" />
+    <property name="lib" location="lib" />
+    <property name="lib.codepoint" location="${lib}/codepoint.jar" />
+    <property name="lib.junit.dir" location="${lib}/junit4" />
+
+    <property name="src.version" value="1.8" />
 
     <property name="build.dir" location="build" />
     <property name="dist.dir" location="dist" />
@@ -14,38 +18,44 @@
     <property name="src.build.dir" location="${build.dir}/classes" />
     <property name="test.build.dir" location="${build.dir}/test/classes" />
     <property name="test.report.dir" location="${build.dir}/test/reports" />
-    <property name="test.lib.junit" location="lib/junit-4.12.jar" />
-    <property name="test.lib.hamcrest" location="lib/hamcrest-core-1.3.jar" />
+
+    <path id="build.classpath">
+        <pathelement location="${lib.codepoint}" />
+    </path>
+
+    <path id="test.classpath">
+        <pathelement location="${src.build.dir}" />
+        <pathelement location="${lib.codepoint}" />
+        <fileset dir="${lib.junit.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${test.build.dir}" />
+    </path>
 
     <target name="all" depends="test,jar,docjar" />
 
     <target name="compile">
         <mkdir dir="${src.build.dir}" />
-        <javac debug="on" source="1.8" includeantruntime="false"
-            classpath="${lib.codepoint}"
-            srcdir="${src}" destdir="${src.build.dir}" />
+        <javac debug="on" source="${src.version}" includeantruntime="false"
+            srcdir="${src}" destdir="${src.build.dir}">
+            <classpath refid="build.classpath" />
+        </javac>
     </target>
 
-    <target name="test" depends="compile">
+    <target name="testcompile" depends="compile">
+        <delete dir="${test.build.dir}" quiet="true" />
         <mkdir dir="${test.build.dir}" />
-        <mkdir dir="${test.report.dir}" />
-        <javac debug="on" source="1.8" includeantruntime="false"
+        <javac debug="on" source="${src.version}" includeantruntime="false"
             srcdir="${test}" destdir="${test.build.dir}">
-            <classpath>
-                <pathelement location="${test.lib.junit}" />
-                <pathelement location="${test.lib.hamcrest}" />
-                <pathelement location="${src.build.dir}" />
-                <pathelement location="${lib.codepoint}" />
-            </classpath>
+            <classpath refid="test.classpath" />
         </javac>
+    </target>
+
+    <target name="test" depends="compile,testcompile">
+        <mkdir dir="${test.report.dir}" />
         <junit printsummary="yes" fork="yes" haltonfailure="yes">
-            <classpath>
-                <pathelement location="${test.build.dir}" />
-                <pathelement location="${src.build.dir}" />
-                <pathelement location="${test.lib.junit}" />
-                <pathelement location="${test.lib.hamcrest}" />
-                <pathelement location="${lib.codepoint}" />
-            </classpath>
+            <classpath refid="test.classpath" />
+            <formatter type="plain" />
             <batchtest fork="yes" todir="${test.report.dir}">
                 <fileset dir="test">
                     <include name="**/*Test*.java" />
