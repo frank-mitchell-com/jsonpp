@@ -1,26 +1,21 @@
 ## Compile and Install
 
-* Create `build.xml` to run tests and create `jsonpp-${VERSION}.jar`.
-  (Independent of Eclipse, NetBeans, etc.)
+* Amend `build.xml` to create `jsonpp-${VERSION}.jar`.
 
   - read version from VERSION.txt?
   - pull in latest codepoint.jar?
 
-* Use maven instead?
-
 
 ## API
+
+* Remove API dependency on CodePoint?
 
 * Spawn a sub-parser / sub-emitter to hand off to another module.
   E.g. in JSON-RPC one part of the code handles the envelope, another
   processes the procedure and arguments.
 
-* Add AbstractJson...Factory to `**.jsonpp` (no `spi`)?
-
 
 ## Internals
-
-* Make tracking the current key a/or index optional, to save time and space.
 
 * Create alternate `JsonLexer` that uses regular expressions.
 
@@ -41,6 +36,8 @@
 * Make tests more readable and writable. E.g. feed bits of JSON to a MockReader
   just before testing they were parsed correctly.
 
+* Real tests of JsonBuilder, etc.
+
 * Test error conditions.
 
 * Improve error reporting.
@@ -58,13 +55,6 @@
   - against default JSONP implementations.
 
   - vs. ANTLR parser (callback-based)
-
-
-## Compatibility
-
-* create `JsonProvider` and wrap with whole JSONP API.
-
-* put JSONP API implementation into separate jar?
 
 
 ## Documentation
