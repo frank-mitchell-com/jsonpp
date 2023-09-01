@@ -38,9 +38,8 @@ skills, but JSONPP has a different design and different goals from JSONP.
 
 Note that this project depends on another project of mine, **codepoint**.
 It's a small library for adapting various input and output sources to
-a stream of Unicode codepoints.  Java 8 and Java 9 lacked such a thing,
-so I wrote one.  I haven't looked into Java 17 or Java 19 yet, so maybe
-I can simply use a standard API.
+a stream of Unicode codepoints.  Java lacked such a thing, or at least
+I couldn't find it in Java 19, so I wrote one.
 
 The project includes project files for both Eclipse and NetBeans. Fire up your
 favorite IDE (if it's one of those two) and go to town.
