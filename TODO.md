@@ -8,6 +8,8 @@
 
 ## API
 
+* Use `java.util.ServiceLoader` to load a factory.
+
 * Remove API dependency on CodePoint?
 
 * Spawn a sub-parser / sub-emitter to hand off to another module.
