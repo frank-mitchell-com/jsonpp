@@ -23,37 +23,25 @@
  */
 package com.frank_mitchell.jsonbb;
 
-import com.frank_mitchell.jsonbb.spi.DefaultJsonProvider;
-
 /**
- * Facade for a {@link JsonBuilderProvider} that can create
- * {@link JsonArrayBuilder}s and {@link JsonObjectBuilder}s.
+ * Factory for {@link JsonArrayBuilder}s and {@link JsonObjectBuilder}s.
  *
  * @author Frank Mitchell
  */
-public class JsonBuilderFactory {
-    
-    // Eventually we'll use the ServiceProvider interface, but for now
-    private static final JsonBuilderProvider PROVIDER = new DefaultJsonProvider();
-    
-    private JsonBuilderFactory() {
-    }
-    
+public interface JsonBuilderFactory {
+
     /**
-     * Create a builder for a syntactically correct JSON Array.
+     * Create a new instance capable of constructing a JSON Array.
      *
-     * @return the builder
+     * @return new builder
      */
-    public static JsonArrayBuilder getNewArray() {
-        return PROVIDER.getNewArray();
-    }
-    
+    JsonArrayBuilder getNewArray();
+
     /**
-     * Create a builder for a syntactically correct JSON Object.
+     * Create a new instance capable of constructing a JSON Object.
      *
-     * @return the builder
+     * @return new builder
      */
-    public static JsonObjectBuilder getNewObject() {
-        return PROVIDER.getNewObject();
-    }
+    JsonObjectBuilder getNewObject();
+    
 }

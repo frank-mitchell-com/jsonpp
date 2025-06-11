@@ -25,18 +25,18 @@ package com.frank_mitchell.jsonbb.spi;
 
 import com.frank_mitchell.jsonbb.JsonArrayBuilder;
 import com.frank_mitchell.jsonbb.JsonObjectBuilder;
-import com.frank_mitchell.jsonbb.JsonBuilderProvider;
+import com.frank_mitchell.jsonbb.JsonBuilderFactory;
 
 /**
  * Default implementation of a Builder provider.
  *
  * @author Frank Mitchell
  */
-public class DefaultJsonProvider implements JsonBuilderProvider {
+public class DefaultJsonBuilderFactory implements JsonBuilderFactory {
     /**
      * Default and only constructor.
      */
-    public DefaultJsonProvider() {
+    public DefaultJsonBuilderFactory() {
     }
 
     @Override

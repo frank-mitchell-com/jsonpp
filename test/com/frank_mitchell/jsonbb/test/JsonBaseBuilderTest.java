@@ -23,13 +23,16 @@
  */
 package com.frank_mitchell.jsonbb.test;
 
-import com.frank_mitchell.jsonbb.*;
+import com.frank_mitchell.json.Json;
+import com.frank_mitchell.jsonbb.JsonArrayBuilder;
+import com.frank_mitchell.jsonbb.JsonObjectBuilder;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -51,7 +54,7 @@ public class JsonBaseBuilderTest {
 
     @Test
     public void testEmptyArray() throws IOException {
-        JsonArrayBuilder builder = JsonBuilderFactory.getNewArray();
+        JsonArrayBuilder builder = Json.getNewArray();
         
         builder.writeTo(_writer);
         assertEquals("[]", _writer.toString());
@@ -59,7 +62,7 @@ public class JsonBaseBuilderTest {
 
     @Test
     public void testEmptyObject() throws IOException {
-        JsonObjectBuilder builder = JsonBuilderFactory.getNewObject();
+        JsonObjectBuilder builder = Json.getNewObject();
         
         builder.writeTo(_writer);
         assertEquals("{}", _writer.toString());

@@ -24,10 +24,10 @@
 package com.frank_mitchell.jsonpp.spi;
 
 import com.frank_mitchell.codepoint.CodePointSource;
-import java.io.IOException;
-import java.io.InputStream;
 import com.frank_mitchell.codepoint.ForCharsets;
 import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 /**

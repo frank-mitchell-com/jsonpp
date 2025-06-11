@@ -1,0 +1,6 @@
+# default factory
+com.frank_mitchell.jsonpp.spi.DefaultJsonPullParserFactory
+# uncomment once this is tested
+# com.frank_mitchell.jsonpp.spi.FastJsonPullParserFactory
+
+

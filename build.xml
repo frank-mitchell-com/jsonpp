@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project name="JSONPP - JSON Pull Parser in Java" default="all">
 
+    <property name="etc" location="etc" />
     <property name="src" location="src" />
     <property name="test" location="test" />
     <property name="lib" location="lib" />
@@ -66,8 +67,11 @@
     </target>
 
     <target name="jar" depends="compile">
-        <jar destfile="${jar.name}" basedir="${src.build.dir}" />
-     </target>
+        <jar destfile="${jar.name}">
+            <fileset dir="${etc}" includes="META-INF/" />
+            <fileset dir="${src.build.dir}" />
+        </jar>
+    </target>
 
     <target name="doc">
         <javadoc sourcepath="${src}" destdir="${doc.build.dir}">
