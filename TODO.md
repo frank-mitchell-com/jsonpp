@@ -8,8 +8,6 @@
 
 ## API
 
-* Use `java.util.ServiceLoader` to load a factory.
-
 * Remove API dependency on CodePoint?
 
 * Spawn a sub-parser / sub-emitter to hand off to another module.
@@ -39,6 +37,8 @@
   just before testing they were parsed correctly.
 
 * Real tests of JsonBuilder, etc.
+
+* Real test of FastJsonPullParser.
 
 * Test error conditions.
 
