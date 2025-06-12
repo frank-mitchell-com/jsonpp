@@ -40,8 +40,10 @@ import com.frank_mitchell.jsonbb.spi.DefaultJsonBuilderFactory;
 import java.util.Optional;
 
 /**
+ * A facade to create parsers and builders using a {@link ServiceLoader} API
+ * and factory implementations.
  *
- * @author Frank Mitchell <me@frank-mitchell.com>
+ * @author Frank Mitchell
  */
 public class Json {
     /**
@@ -176,4 +178,9 @@ public class Json {
         return factory.createParser(cps);
     }
 
+    /**
+     * Private constructor so no one can create an instance.
+     */
+    private Json() {
+    }
 }
